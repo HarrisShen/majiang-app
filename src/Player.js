@@ -3,11 +3,11 @@ import Tile from "./Tile";
 
 class Player extends Component {  
     renderHand(i) {
-      const activeHand = this.props.active && noAction(this.props.action);
+      const activeHand = this.props.active && this.props.status === 1;
       return (
         <Tile 
           value={this.props.hand[i]} 
-          onClick={activeHand ? (() => this.props.hand_onclick(i)) : undefined}
+          onClick={activeHand ? (() => this.props.handOnclick(i)) : undefined}
         />
       );
     }
@@ -25,10 +25,10 @@ class Player extends Component {
     }
     
     render() {
-      let infoStr;
-      if(this.props.winner) {
+      let infoStr = '';
+      if(this.props.status === 0 && this.props.winner) {
         infoStr = "I win!!!";
-      } else if(this.props.active) {
+      } else if(this.props.status !== 0 && this.props.active) {
         infoStr = "<=";
       }
 
@@ -45,22 +45,26 @@ class Player extends Component {
         wasteTiles.push(this.renderWaste(i));
       }
       const ctrlButtons = [];
-      if(this.props.action) {
+      if(this.props.action && this.props.status === 2) {
         if(this.props.action["pong"]) {
           ctrlButtons.push(
-            <button className="pong-btn" onClick={this.props.pong_onclick}>Pong</button>,
-            <button className="cancel-btn" onClick={this.props.cancel_onclick}>Cancel</button>
+            <button className="pong-btn" onClick={this.props.pongOnclick}>Pong</button>
           );
-        } else if(this.props.action["kong"]) {
+        } 
+        if(this.props.action["kong"]) {
           ctrlButtons.push(
-            <button className="kong-btn" onClick={this.props.kong_onclick}>Kong</button>,
-            <button className="cancel-btn" onClick={this.props.cancel_onclick}>Cancel</button>
+            <button className="kong-btn" onClick={this.props.kongOnclick}>Kong</button>
           );
-        } else if(this.props.action["hu"]) {
+        } 
+        if(this.props.action["hu"]) {
           ctrlButtons.push(
-            <button className="hu-btn" onClick={this.props.hu_onclick}>Win!</button>,
-            <button className="cancel-btn" onClick={this.props.cancel_onclick}>Cancel</button>
-          )
+            <button className="hu-btn" onClick={this.props.huOnclick}>Win!</button>
+          );
+        }
+        if(ctrlButtons.length > 0){
+          ctrlButtons.push(
+            <button className="cancel-btn" onClick={this.props.cancelOnclick}>Cancel</button>          
+          );      
         }
       }
       return (
@@ -83,6 +87,6 @@ class Player extends Component {
     }
   }
 
-const noAction = (action) => Object.values(action).every((x) => !x);
+// const noAction = (action) => Object.values(action).every((x) => !x);
 
 export default Player;
