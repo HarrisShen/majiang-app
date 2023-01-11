@@ -87,6 +87,4 @@ class Player extends Component {
     }
   }
 
-// const noAction = (action) => Object.values(action).every((x) => !x);
-
 export default Player;

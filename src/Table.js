@@ -8,6 +8,7 @@ class Table extends Component {
     super(props);
     this.state = {
       tiles: [],
+      self: 'Player 1',
       players: ["Player 1", "Player 2", "Player 3", "Player 4"],
       playerHands: [[], [], [], []],
       playerWaste: [[], [], [], []],
