@@ -32,7 +32,7 @@ class Editor extends Component {
       tiles: this.state.value['tiles'].split(','),
       playerHands: playerHands,
     }
-    this.props.handleSubmit(event, data);
+    this.props.handleSubmit(data);
   }
 
   render() {

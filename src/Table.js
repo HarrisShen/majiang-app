@@ -1,93 +1,64 @@
-import React, {Component} from "react";
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import Player from "./Player";
 import Editor from "./Editor";
 import { postData, putData } from "./request";
 
-class Table extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const socket = io();
+
+function Table() {
+  const [self, setSelf] = useState('Player 1');
+  const [players, setPlayers] = useState(["Player 1", "Player 2", "Player 3", "Player 4"]);
+  const [gameState, setGameState] = useState({
+    tiles: [],
+    playerHands: [[], [], [], []],
+    playerWaste: [[], [], [], []],
+    playerShows: [[], [], [], []],
+    currPlayer: [0],
+    playerActions: [{}, {}, {}, {}],
+    status: 0,
+    winner: [],
+  });
+  /* states for developing ONLY */
+  const [godMode, setGodMode] = useState(false);
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('server game connected');
+    });
+
+    socket.on('update', (newState) => {
+      console.log(newState);
+      setGameState(newState);
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('update');
+    };
+  }, []);
+
+  function clear() {
+    setGameState({
       tiles: [],
-      self: 'Player 1',
-      players: ["Player 1", "Player 2", "Player 3", "Player 4"],
       playerHands: [[], [], [], []],
       playerWaste: [[], [], [], []],
       playerShows: [[], [], [], []],
       currPlayer: [0],
-      playerActions: [],
-      status: 0, // 0 - start/drawing, 1 - playing, 2 - deciding
-      winner: [],
-
-      /* states for developing ONLY */
-      godMode: false,
-    }
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  clear() {
-    this.setState({
-      tiles: [],
-      players: ["Player 1", "Player 2", "Player 3", "Player 4"],
-      playerHands: [[], [], [], []],
-      playerWaste: [[], [], [], []],
-      playerShows: [[], [], [], []],
-      currPlayer: [0],
-      playerActions: [],
+      playerActions: [{}, {}, {}, {}],
       status: 0,
       winner: [],
     });
   }
   
-  dealNext() {
-    const tiles = this.state.tiles.slice();
-    const playerHands = this.state.playerHands.slice();
-    const currPlayer = this.state.currPlayer[0];
-    if(playerHands[currPlayer].length === 14)
-      return;
-    playerHands[currPlayer].push(tiles.pop());
-    playerHands[currPlayer] = playerHands[currPlayer].sort();
-    this.setState({
-      tiles: tiles,
-      playerHands: playerHands,
-    });
-    if(playerHands[currPlayer].length < 14) {
-      this.setState({
-        currPlayer: [getNext(currPlayer)],
-        last_player: currPlayer,
-      });
-    }
-  }
-  
-  dealAll() {
-    const tiles = this.state.tiles.slice();
-    const playerHands = this.state.playerHands.slice();
-    let currPlayer = this.state.currPlayer[0];
-    while(playerHands[currPlayer].length < 14) {
-      playerHands[currPlayer].push(tiles.pop());
-      console.log(tiles.length);
-      playerHands[currPlayer] = playerHands[currPlayer].sort();
-      if(playerHands[currPlayer].length < 14){
-        currPlayer = getNext(currPlayer);
-      }
-    }
-    this.setState({
-      tiles: tiles,
-      playerHands: playerHands,
-      currPlayer: [currPlayer],
-      last_player: getPrev(currPlayer),
-      curr_stage: 1,
-    });
-  }
-  
-  handleStart() {
+  function handleStart() {
     fetch('/game?status=init')
       .then(res => res.json())
-      .then(res => this.setState(res));
+      .then(res => setGameState(res));
   }
 
-  handleDiscard(pid, tid) {
-    const playerHands = this.state.playerHands.slice();
+  function handleDiscard(pid, tid) {
+    const playerHands = gameState.playerHands.slice();
     const data = {
       action: 'discard',
       pid: pid,
@@ -96,95 +67,88 @@ class Table extends Component {
     };
     console.log('discard:' + pid + ',' + tid);
     putData('/game', data)
-      .then(res => this.setState(res));
+      .then(res => setGameState(res));
   }
 
-  handleAction(type, pid) {
+  function handleAction(type, pid) {
     const data = {
       action: type,
       pid: pid,
     };
     console.log(type + ': ' + pid);
     putData('/game', data)
-      .then(res => this.setState(res));
+      .then(res => setGameState(res));
   }
 
-  toggleGodMode() {
-    this.setState({
-      godMode: !this.state.godMode,
-    });
+  function toggleGodMode() {
+    setGodMode(!godMode);
   }
 
-  handleSubmit(event, data) {
+  function handleSubmit(data) {
     postData('/game', data)
-      .then(res => this.setState(res));
-    event.preventDefault();
+      .then(res => setGameState(res));
   }
 
-  render() {
-    const currPlayer = this.state.currPlayer;
-    const active = [false, false, false, false];
-    currPlayer.forEach(i => (active[i] = true));
-    const winner = this.state.winner.slice();
-    const isWinner = [false, false, false, false];
-    winner.forEach(i => (isWinner[i] = true));
-    const actions = this.state.playerActions.slice();
-    const playerList = [];
-    for(let i = 0; i < 4; i++) {
-      const playerProps = {
-        name: this.state.players[i],
-        hand: this.state.playerHands[i],
-        handOnclick: (j) => (this.handleDiscard(i, j)),
-        show: this.state.playerShows[i],
-        waste: this.state.playerWaste[i],
-        active: active[i],
-        winner: isWinner[i],
-        status: this.state.status,
-      };
-      if(actions[i] && this.state.status === 2) {
-        playerProps["action"] = actions[i];
-        let haveAction = false;
-        if(actions[i]["pong"]){
-          playerProps["pongOnclick"] = () => this.handleAction('pong', i);
-          haveAction = true;
-        } else if(actions[i]["kong"]) {
-          playerProps["kongOnclick"] = () => this.handleAction('kong', i);
-          haveAction = true;
-        } 
-        if(actions[i]["hu"]){
-          playerProps["huOnclick"] = () => this.handleAction('win', i);
-          haveAction = true;
-        }
-        if(haveAction) {
-          playerProps["cancelOnclick"] = () => this.handleAction('cancel', i);
-        }
+  const currPlayer = gameState.currPlayer;
+  const active = [false, false, false, false];
+  currPlayer.forEach(i => {
+    active[i] = true;
+  });
+  const winner = gameState['winner'].slice();
+  const isWinner = [false, false, false, false];
+  winner.forEach(i => (isWinner[i] = true));
+  const actions = gameState.playerActions.slice();
+  const playerList = [];
+  for(let i = 0; i < 4; i++) {
+    const playerProps = {
+      name: players[i],
+      hand: gameState.playerHands[i],
+      handOnclick: (j) => (handleDiscard(i, j)),
+      show: gameState.playerShows[i],
+      waste: gameState.playerWaste[i],
+      active: active[i],
+      winner: isWinner[i],
+      status: gameState.status,
+    };
+    if(i === 0 && Object.values(actions[0]).some(v => v)) {
+      playerProps['action'] = actions[i];
+      let haveAction = false;
+      if(actions[i]['pong']){
+        playerProps["pongOnclick"] = () => handleAction('pong', i);
+        haveAction = true;
+      } else if(actions[i]['kong']) {
+        playerProps["kongOnclick"] = () => handleAction('kong', i);
+        haveAction = true;
+      } 
+      if(actions[i]['hu']){
+        playerProps["huOnclick"] = () => handleAction('win', i);
+        haveAction = true;
       }
-      playerList.push((<Player {...playerProps}/>));
+      if(haveAction) {
+        playerProps["cancelOnclick"] = () => handleAction('cancel', i);
+      }
     }
-    const editorBox = (
-      <div>
-        <Editor players={this.state.players} handleSubmit={this.handleSubmit}/>
-      </div>
-    );
-    return (
-      <div>
-        <h1>My Majiang Table</h1>
-        <button onClick={() => this.handleStart()}>Start</button>
-        <button onClick={() => this.clear()}>Clear</button>
-        <button onClick={() => this.toggleGodMode()}>God Mode: {this.state.godMode? 'ON' : 'OFF'}</button>
-        <p>Tiles left: {this.state.tiles.length}</p>
-        <div>
-          {playerList}
-        </div>
-        {this.state.godMode && editorBox}
-      </div>
-    );    
+    playerList.push((<Player { ...playerProps }/>));
   }
+  const editorBox = (
+    <div>
+      <Editor players={players} handleSubmit={handleSubmit}/>
+    </div>
+  );
+  return (
+    <div>
+      <h1>My Majiang Table</h1>
+      <button onClick={handleStart}>Start</button>
+      <button onClick={clear}>Clear</button>
+      <button onClick={toggleGodMode}>God Mode: {godMode? 'ON' : 'OFF'}</button>
+      <p>Tiles left: {gameState.tiles.length}</p>
+      <div>
+        {playerList}
+      </div>
+      {godMode && editorBox}
+    </div>
+  );
 }
-
-const getNext = (i) => (i + 1) % 4;
-
-const getPrev = (i) => (i + 3) % 4;
 
 export default Table;
 
