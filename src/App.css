@@ -47,3 +47,7 @@
   outline: 2px solid black;
   padding: 5px;
 }
+
+.tile-last-drawn {
+  margin-left: 15px;
+}

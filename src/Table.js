@@ -16,6 +16,7 @@ function Table() {
     playerShows: [[], [], [], []],
     currPlayer: [0],
     playerActions: [{}, {}, {}, {}],
+    lastAction: '',
     status: 0,
     winner: [],
   });
@@ -46,6 +47,7 @@ function Table() {
       playerShows: [[], [], [], []],
       currPlayer: [0],
       playerActions: [{}, {}, {}, {}],
+      lastAction: '',
       status: 0,
       winner: [],
     });
@@ -109,6 +111,7 @@ function Table() {
       active: active[i],
       winner: isWinner[i],
       status: gameState.status,
+      lastAction: gameState.lastAction,
     };
     if(i === 0 && Object.values(actions[0]).some(v => v)) {
       playerProps['action'] = actions[i];
