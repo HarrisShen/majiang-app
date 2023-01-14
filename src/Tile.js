@@ -1,20 +1,18 @@
-import React, {Component} from "react";
+import React from "react";
 
-class Tile extends Component {
-    render() {
-      const tileStyle = {
-        backgroundImage: 'url("/tiles/tile-' + this.props.value + '.png")',
-        backgroundSize: "cover"
-      };
-      let classStr = "tile tile-" + this.props.value;
-      if(this.props.additionalClass) classStr += ' ' + this.props.additionalClass;
-      return (
-        <button 
-          className={classStr}
-          onClick={this.props.onClick} style={tileStyle}>
-        </button>
-      );    
-    }
+function Tile(props) {
+    const tileStyle = {
+      backgroundImage: 'url("/tiles/tile-' + props.value + '.png")',
+      backgroundSize: "cover"
+    };
+    let classStr = "tile tile-" + props.value;
+    if(props.additionalClass) classStr += ' ' + props.additionalClass;
+    return (
+      <button 
+        className={classStr}
+        onClick={props.onClick} style={tileStyle}>
+      </button>
+    );
   }
 
 export default Tile;
