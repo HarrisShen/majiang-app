@@ -28,9 +28,9 @@ function Table() {
       console.log('server game connected');
     });
 
-    socket.on('update', (newState) => {
-      console.log(newState);
-      setGameState(newState);
+    socket.on('update', (data) => {
+      console.log(data.gameState);
+      setGameState(data.gameState);
     });
 
     return () => {
@@ -56,7 +56,10 @@ function Table() {
   function handleStart() {
     fetch('/game?status=init')
       .then(res => res.json())
-      .then(res => setGameState(res));
+      .then(res => {
+        console.log(res.gameID);
+        setGameState(res.gameState);
+      });
   }
 
   function handleDiscard(pid, tid) {
@@ -69,7 +72,7 @@ function Table() {
     };
     console.log('discard:' + pid + ',' + tid);
     putData('/game', data)
-      .then(res => setGameState(res));
+      .then(res => setGameState(res.gameState));
   }
 
   function handleAction(type, pid) {
@@ -79,7 +82,7 @@ function Table() {
     };
     console.log(type + ': ' + pid);
     putData('/game', data)
-      .then(res => setGameState(res));
+      .then(res => setGameState(res.gameState));
   }
 
   function toggleGodMode() {
@@ -88,7 +91,7 @@ function Table() {
 
   function handleSubmit(data) {
     postData('/game', data)
-      .then(res => setGameState(res));
+      .then(res => setGameState(res.gameState));
   }
 
   const currPlayer = gameState.currPlayer;
