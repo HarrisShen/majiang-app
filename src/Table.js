@@ -59,25 +59,12 @@ function Table() {
     socket.emit('start');
   }
 
-  function handleDiscard(pid, tid) {
-    const playerHands = gameState.playerHands.slice();
-    // const data = {
-    //   action: 'discard',
-    //   pid: pid,
-    //   tid: tid,
-    //   discardTile: playerHands[pid][tid],
-    // };
-    console.log('discard:' + pid + ',' + playerHands[pid][tid]);
-    socket.emit('discard', 'discard', pid, tid);
-  }
-
-  function handleAction(type, pid) {
-    const data = {
-      action: type,
-      pid: pid,
-    };
-    console.log(type + ': ' + pid);
-    socket.emit('action', type, pid);
+  function handleAction(type, pid, tid = null) {
+    if(type === 'discard') {
+      const playerHands = gameState.playerHands.slice();
+      console.log('discard:' + pid + ',' + playerHands[pid][tid]);
+    } else console.log(type + ': ' + pid);
+    socket.emit('action', type, pid, tid);
   }
 
   function toggleGodMode() {
@@ -103,7 +90,7 @@ function Table() {
     const playerProps = {
       name: players[i],
       hand: gameState.playerHands[i],
-      handOnclick: (j) => (handleDiscard(i, j)),
+      handOnclick: (j) => (handleAction('discard', i, j)),
       show: gameState.playerShows[i],
       waste: gameState.playerWaste[i],
       active: active[i],
