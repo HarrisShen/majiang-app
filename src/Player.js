@@ -3,12 +3,13 @@ import Tile from "./Tile";
 
 class Player extends Component {  
     renderHand(i, addClass = '') {
-      const activeHand = this.props.active && this.props.status === 1;
+      const activeHand = this.props.control && this.props.active && this.props.status === 1;
       return (
         <Tile 
           value={this.props.hand[i]} 
           onClick={activeHand ? (() => this.props.handOnclick(i)) : undefined}
           additionalClass={addClass}
+          isActive={activeHand}
         />
       );
     }

@@ -51,3 +51,7 @@
 .tile-last-drawn {
   margin-left: 15px;
 }
+
+.tile-focused {
+  filter: brightness(50%);
+}

@@ -89,6 +89,7 @@ function Table() {
   for(let i = 0; i < 4; i++) {
     const playerProps = {
       name: players[i],
+      control: i === 0,
       hand: gameState.playerHands[i],
       handOnclick: (j) => (handleAction('discard', i, j)),
       show: gameState.playerShows[i],
