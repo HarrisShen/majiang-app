@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Player from "./Player";
 import Editor from "./Editor";
-import { postData, putData } from "./request";
+import { postData } from "./request";
 
 const socket = io();
 
@@ -52,27 +52,34 @@ function Table() {
       winner: [],
     });
   }
+
+  function update(data) {
+    console.log(data.gameID);
+    console.log(data.gameState);
+    setGameState(data.gameState);
+  }
   
   function handleStart() {
-    fetch('/game?status=init')
-      .then(res => res.json())
-      .then(res => {
-        console.log(res.gameID);
-        setGameState(res.gameState);
-      });
+    // fetch('/game?status=init')
+    //   .then(res => res.json())
+    //   .then(res => {
+    //     console.log(res.gameID);
+    //     setGameState(res.gameState);
+    //   });
+    console.log('start clicked');
+    socket.emit('start', update);
   }
 
   function handleDiscard(pid, tid) {
     const playerHands = gameState.playerHands.slice();
-    const data = {
-      action: 'discard',
-      pid: pid,
-      tid: tid,
-      discardTile: playerHands[pid][tid],
-    };
-    console.log('discard:' + pid + ',' + tid);
-    putData('/game', data)
-      .then(res => setGameState(res.gameState));
+    // const data = {
+    //   action: 'discard',
+    //   pid: pid,
+    //   tid: tid,
+    //   discardTile: playerHands[pid][tid],
+    // };
+    console.log('discard:' + pid + ',' + playerHands[pid][tid]);
+    socket.emit('discard', 'discard', pid, tid);
   }
 
   function handleAction(type, pid) {
@@ -81,8 +88,7 @@ function Table() {
       pid: pid,
     };
     console.log(type + ': ' + pid);
-    putData('/game', data)
-      .then(res => setGameState(res.gameState));
+    socket.emit('action', type, pid);
   }
 
   function toggleGodMode() {
