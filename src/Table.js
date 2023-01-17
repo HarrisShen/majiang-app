@@ -29,6 +29,7 @@ function Table() {
     });
 
     socket.on('update', (data) => {
+      console.log(data.gameID);
       console.log(data.gameState);
       setGameState(data.gameState);
     });
@@ -52,22 +53,10 @@ function Table() {
       winner: [],
     });
   }
-
-  function update(data) {
-    console.log(data.gameID);
-    console.log(data.gameState);
-    setGameState(data.gameState);
-  }
   
   function handleStart() {
-    // fetch('/game?status=init')
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     console.log(res.gameID);
-    //     setGameState(res.gameState);
-    //   });
     console.log('start clicked');
-    socket.emit('start', update);
+    socket.emit('start');
   }
 
   function handleDiscard(pid, tid) {
