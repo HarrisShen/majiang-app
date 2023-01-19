@@ -2,14 +2,15 @@ import React, {Component} from "react";
 import Tile from "./Tile";
 
 class Player extends Component {  
-    renderHand(i, addClass = '') {
-      const activeHand = this.props.control && this.props.active && this.props.status === 1;
+    renderHand(i) {
+      const isActiveHand = this.props.control && this.props.active && this.props.status === 1;
+      const isLastDrawn = i === this.props.hand.length - 1 && this.props.hand.length % 3 === 2 && this.props.lastAction === 'draw';
       return (
         <Tile 
-          value={this.props.hand[i]} 
-          onClick={activeHand ? (() => this.props.handOnclick(i)) : undefined}
-          additionalClass={addClass}
-          isActive={activeHand}
+          value={this.props.hand[i]}
+          isActive={isActiveHand}
+          isLastDrawn={isLastDrawn}
+          onClick={() => this.props.handOnclick(i)}
         />
       );
     }
@@ -35,13 +36,8 @@ class Player extends Component {
       }
 
       const handTiles = [];
-      let i;
-      for(i = 0; i < this.props.hand.length; i++) {
+      for(let i = 0; i < this.props.hand.length; i++) {
         handTiles.push(this.renderHand(i));
-      }
-      if(this.props.hand.length % 3 === 2 && this.props.lastAction === 'draw') {
-        handTiles.pop();
-        handTiles.push(this.renderHand(i - 1, 'tile-last-drawn'));
       }
       const showTiles = [];
       for(let i = 0; i < this.props.show.length; i++) {
