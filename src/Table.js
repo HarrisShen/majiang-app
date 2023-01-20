@@ -6,7 +6,7 @@ import { postData } from "./request";
 
 const socket = io();
 
-function Table() {
+function Table(props) {
   const [players, setPlayers] = useState(["Player 1", "Player 2", "Player 3", "Player 4"]);
   const [gameState, setGameState] = useState({
     tiles: [],
@@ -24,7 +24,7 @@ function Table() {
 
   useEffect(() => {
     socket.on('connect', () => {
-      console.log('server game connected');
+      console.log('table socket connected');
     });
 
     socket.on('update', (data) => {
@@ -123,17 +123,21 @@ function Table() {
     }
     playerList.push((<Player { ...playerProps }/>));
   }
+
   const editorBox = (
     <div>
       <Editor players={players} handleSubmit={handleSubmit}/>
     </div>
   );
+
   return (
     <div>
-      <h1>Play Majiang Together by R.S.</h1>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={clear}>Clear</button>
-      <button onClick={toggleGodMode}>God Mode: {godMode? 'ON' : 'OFF'}</button>
+      <h3>Table-{props.tableID}</h3>
+      <div>
+        <button onClick={handleStart}>Start</button>
+        <button onClick={clear}>Clear</button>
+        <button onClick={toggleGodMode}>God Mode: {godMode? 'ON' : 'OFF'}</button>        
+      </div>
       <p>Tiles left: {gameState.tiles.length}</p>
       <div>
         {playerList}
