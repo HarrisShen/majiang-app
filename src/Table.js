@@ -7,7 +7,6 @@ import { postData } from "./request";
 const socket = io();
 
 function Table() {
-  const [self, setSelf] = useState('Player 1');
   const [players, setPlayers] = useState(["Player 1", "Player 2", "Player 3", "Player 4"]);
   const [gameState, setGameState] = useState({
     tiles: [],
@@ -29,7 +28,12 @@ function Table() {
     });
 
     socket.on('update', (data) => {
-      console.log(data.gameID);
+      console.log('game:' + data.gameID);
+      if(data.playerID) {
+        const newPlayers = players.slice();
+        newPlayers[0] = 'User-' + data.playerID;
+        setPlayers(newPlayers);
+      }
       console.log(data.gameState);
       setGameState(data.gameState);
     });
@@ -126,7 +130,7 @@ function Table() {
   );
   return (
     <div>
-      <h1>My Majiang Table</h1>
+      <h1>Play Majiang Together by R.S.</h1>
       <button onClick={handleStart}>Start</button>
       <button onClick={clear}>Clear</button>
       <button onClick={toggleGodMode}>God Mode: {godMode? 'ON' : 'OFF'}</button>
