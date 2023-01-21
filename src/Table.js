@@ -132,7 +132,6 @@ function Table(props) {
 
   return (
     <div>
-      <h3>Table-{props.tableID}</h3>
       <div>
         <button onClick={handleStart}>Start</button>
         <button onClick={clear}>Clear</button>

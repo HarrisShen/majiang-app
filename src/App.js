@@ -7,6 +7,7 @@ const socket = io();
 
 function App() {
   const [tableID, setTableID] = useState('');
+  const [inputTableID, setInputTableID] = useState('');
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -18,33 +19,58 @@ function App() {
     };
   }, []);
 
-  function createTable() {
+  function handleCreate() {
     socket.emit('table:create', (data) => {
       setTableID(data.tableID);
     });
   }
 
-  function leaveTable() {
+  function handleLeave() {
     socket.emit('table:leave', (data) => {
       setTableID(data.tableID);
     });
   }
 
-  let tableCtrl;
+  function handleJoin(event, tableID) {
+    event.preventDefault();
+    socket.emit('table:join', tableID, (data) => {
+      if (data.error) {
+        console.log(data.error);
+        alert(data.error);
+      } else {
+        setTableID(tableID);
+      }
+    })
+  }
+
+  function handleChange(event) {
+    setInputTableID(event.target.value);
+  }
+
+  let tableCtrlPanel;
   if(tableID) {
-    tableCtrl = (<button onClick={leaveTable}>Leave Table</button>);
+    tableCtrlPanel = (
+      <div>
+        <h3>Current table: {tableID}</h3>
+        <button onClick={handleLeave}>Leave Table</button>
+      </div>
+    );
   } else {
-    tableCtrl = [
-      <button onClick={createTable}>Create Table</button>,
-      <button>Join Table</button>        
-    ];
+    tableCtrlPanel = (
+      <div>
+        <button onClick={handleCreate}>Create a new Table</button><br/>
+        <p>or</p>
+        <form onSubmit={(e) => handleJoin(e, inputTableID)}>
+          <input type='text' name="table-id" onChange={handleChange} />
+          <input type='submit' value='Join a Table'/>
+        </form>
+      </div>
+    );
   }
   return (
     <div>
       <h1>Play Majiang Together by R.S.</h1>
-      <div>
-        {tableCtrl}
-      </div>
+      {tableCtrlPanel}
       {tableID && <Table tableID={tableID}/>}
     </div>
   )
