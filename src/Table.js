@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import Player from "./Player";
 import Editor from "./Editor";
 import { postData } from "./request";
 
-const socket = io();
+// const socket = io();
 
 function Table(props) {
-  const [players, setPlayers] = useState(["Player 1", "Player 2", "Player 3", "Player 4"]);
+  // const [players, setPlayers] = useState(["Player 1", "Player 2", "Player 3", "Player 4"]);
   const [gameState, setGameState] = useState({
     tiles: [],
     playerHands: [[], [], [], []],
@@ -22,6 +22,8 @@ function Table(props) {
   /* states for developing ONLY */
   const [godMode, setGodMode] = useState(false);
 
+  const socket = props.socket;
+
   useEffect(() => {
     socket.on('connect', () => {
       console.log('table socket connected');
@@ -29,11 +31,6 @@ function Table(props) {
 
     socket.on('update', (data) => {
       console.log('game:' + data.gameID);
-      if(data.playerID) {
-        const newPlayers = players.slice();
-        newPlayers[0] = 'User-' + data.playerID;
-        setPlayers(newPlayers);
-      }
       console.log(data.gameState);
       setGameState(data.gameState);
     });
@@ -92,7 +89,7 @@ function Table(props) {
   const playerList = [];
   for(let i = 0; i < 4; i++) {
     const playerProps = {
-      name: players[i],
+      name: props.players[i],
       control: i === 0,
       hand: gameState.playerHands[i],
       handOnclick: (j) => (handleAction('discard', i, j)),
@@ -126,7 +123,7 @@ function Table(props) {
 
   const editorBox = (
     <div>
-      <Editor players={players} handleSubmit={handleSubmit}/>
+      <Editor players={props.players} handleSubmit={handleSubmit}/>
     </div>
   );
 
