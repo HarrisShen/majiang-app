@@ -40,6 +40,7 @@ function App() {
 
   function handleJoin(event, tableID) {
     event.preventDefault();
+    if(!tableID) return;
     socket.emit('table:join', tableID, (data) => {
       if (data.error) {
         console.log(data.error);
@@ -47,6 +48,7 @@ function App() {
       } else {
         setTableID(tableID);
         setPlayers(data.players);
+        setInputTableID(''); // clear input - in case for leaving table and back to join page
       }
     })
   }

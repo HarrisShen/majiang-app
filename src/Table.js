@@ -57,7 +57,7 @@ function Table(props) {
   
   function handleStart() {
     console.log('start clicked');
-    socket.emit('start');
+    socket.emit('game:start');
   }
 
   function handleAction(type, pid, tid = null) {
@@ -65,7 +65,7 @@ function Table(props) {
       const playerHands = gameState.playerHands.slice();
       console.log('discard:' + pid + ',' + playerHands[pid][tid]);
     } else console.log(type + ': ' + pid);
-    socket.emit('action', type, pid, tid);
+    socket.emit('game:action', type, pid, tid);
   }
 
   function toggleGodMode() {
