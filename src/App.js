@@ -8,20 +8,34 @@ const socket = io();
 function App() {
   const [tableID, setTableID] = useState('');
   const [players, setPlayers] = useState([]);
+  const [self, setSelf] = useState('');
   const [inputTableID, setInputTableID] = useState('');
+  const [gameStatus, setGameStatus] = useState(0);
+  const [gameState, setGameState] = useState({});
 
   useEffect(() => {
     socket.on('connect', () => {
       console.log('app socket connected');
     });
 
+    socket.on('player:init', (data) => {
+      setSelf(data.self);
+    });
+    
     socket.on('table:update', (data) => {
       setPlayers(data.players);
+    });
+
+    socket.on('game:update', (data) => {
+      console.log('game:' + data.gameID);
+      console.log(data.gameState);
+      setGameState(data.gameState);
     });
 
     return () => {
       socket.off('connect');
       socket.off('table:update');
+      socket.off('game:update');
     };
   }, []);
 
@@ -82,7 +96,12 @@ function App() {
     <div>
       <h1>Play Majiang Together by R.S.</h1>
       {tableCtrlPanel}
-      {tableID && <Table tableID={tableID} players={players} socket={socket} />}
+      {tableID && (
+        <Table 
+          tableID={tableID} players={players} self={self}  
+          gameStatus={gameStatus} gameState={gameState} socket={socket}
+        />
+      )}
     </div>
   );
 }
