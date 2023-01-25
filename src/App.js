@@ -8,6 +8,7 @@ const socket = io();
 function App() {
   const [tableID, setTableID] = useState('');
   const [players, setPlayers] = useState([]);
+  const [playerReady, setPlayerReady] = useState([]);
   const [self, setSelf] = useState('');
   const [inputTableID, setInputTableID] = useState('');
   const [gameStatus, setGameStatus] = useState(0);
@@ -23,7 +24,8 @@ function App() {
     });
     
     socket.on('table:update', (data) => {
-      setPlayers(data.players);
+      if (data.players) setPlayers(data.players);
+      if (data.playerReady) setPlayerReady(data.playerReady);
     });
 
     socket.on('game:update', (data) => {
@@ -43,6 +45,7 @@ function App() {
     socket.emit('table:create', (data) => {
       setTableID(data.tableID);
       setPlayers(data.players);
+      setPlayerReady(data.playerReady);
     });
   }
 
@@ -62,6 +65,7 @@ function App() {
       } else {
         setTableID(tableID);
         setPlayers(data.players);
+        setPlayerReady(data.playerReady);
         setInputTableID(''); // clear input - in case for leaving table and back to join page
       }
     })
@@ -69,6 +73,12 @@ function App() {
 
   function handleChange(event) {
     setInputTableID(event.target.value);
+  }
+
+  function handleReady() {
+    socket.emit('game:ready', (data) => {
+      setPlayerReady(data.playerReady);
+    });
   }
 
   let tableCtrlPanel;
@@ -98,8 +108,8 @@ function App() {
       {tableCtrlPanel}
       {tableID && (
         <Table 
-          tableID={tableID} players={players} self={self}  
-          gameStatus={gameStatus} gameState={gameState} socket={socket}
+          tableID={tableID} players={players} self={self} playerReady={playerReady}  
+          gameStatus={gameStatus} gameState={gameState} handleReady={handleReady}
         />
       )}
     </div>

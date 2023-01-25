@@ -57,13 +57,13 @@ function Table(props) {
   //   socket.emit('game:start');
   // }
 
-  function handleAction(type, pid, tid = null) {
-    if(type === 'discard') {
-      const playerHands = props.gameState.playerHands.slice();
-      console.log('discard:' + pid + ',' + playerHands[pid][tid]);
-    } else console.log(type + ': ' + pid);
-    socket.emit('game:action', type, pid, tid);
-  }
+  // function handleAction(type, pid, tid = null) {
+  //   if(type === 'discard') {
+  //     const playerHands = props.gameState.playerHands.slice();
+  //     console.log('discard:' + pid + ',' + playerHands[pid][tid]);
+  //   } else console.log(type + ': ' + pid);
+  //   socket.emit('game:action', type, pid, tid);
+  // }
 
   // function toggleGodMode() {
   //   setGodMode(!godMode);
@@ -125,18 +125,21 @@ function Table(props) {
   // );
 
   const players = props.players.slice();
+  const playerReady = props.playerReady.slice();
   const offset = players.indexOf(props.self);
   const playerList = [];
   for (let i = 0; i < players.length; i++) {
+    let idx = (i + offset) % players.length;
     let playerProps = {
-      id: players[(i + offset) % players.length],
+      id: players[idx],
       status: props.gameStatus,
+      ready: playerReady[idx],
     };
     // add more props if it is player themself
     if (i === 0) {
       Object.assign(playerProps, {
         control: true,
-        socket: socket,
+        readyOnClick: props.handleReady,
       });
     }
     playerList.push( <Player {...playerProps} /> )

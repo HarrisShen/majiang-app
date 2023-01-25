@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Tile from "./Tile";
 
 function Player(props) {
-  const [ready, setReady] = useState(false);
+  // const [ready, setReady] = useState(false);
 
-  const socket = props.socket;
+  // const socket = props.socket;
 
   function renderHand(i) {
     const isActiveHand = props.control && props.active && props.status === 1;
@@ -31,13 +31,13 @@ function Player(props) {
     );
   }
 
-  function readyOnClick() {
-    socket.emit('game:ready', ready, (data) => {
-      setReady(data.ready);
-    });
-  }
+  // function readyOnClick() {
+  //   socket.emit('game:ready', ready, (data) => {
+  //     setReady(data.ready);
+  //   });
+  // }
     
-  let infoStr = ready ? '\u2713' : '';
+  let infoStr = props.ready ? '\u2713' : '';
   // if(props.status === 0 && props.winner) {
   //   infoStr = "I win!!!";
   // } else if(props.status !== 0 && props.active) {
@@ -63,13 +63,15 @@ function Player(props) {
     }    
   }
   const ctrlButtons = [];
-  if (props.control && props.status === 0) {
-    ctrlButtons.push(
-      <button className="ready-btn" onClick={readyOnClick}>{
-        ready ? "Cancel" : "Ready"
-      }</button>
-    );
-  } else if (props.action && props.status === 2) {
+  if (props.status === 0) {
+    if (props.control) {
+      ctrlButtons.push(
+        <button className="ready-btn" onClick={props.readyOnClick}>{
+          props.ready ? "Cancel" : "Ready"
+        }</button>
+      );
+    }
+  } else if (props.status === 2 && props.action) {
     if(props.action["pong"]) {
       ctrlButtons.push(
         <button className="pong-btn" onClick={props.pongOnclick}>Pong</button>
