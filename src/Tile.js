@@ -10,14 +10,14 @@ function Tile(props) {
 
   let classStr = 'tile';
   if(props.isLastDrawn) classStr += ' tile-last-drawn';
-  if(props.isActive && isFocused) classStr += ' tile-focused';  
+  if(props.active && isFocused) classStr += ' tile-focused';  
 
   return (
     <button 
       className={classStr} style={tileStyle}
-      onClick={props.isActive ? () => {setIsFocused(false); props.onClick()} : undefined}
-      onMouseEnter={props.isActive ? () => setIsFocused(true) : undefined}
-      onMouseLeave={props.isActive ? () => setIsFocused(false) : undefined}
+      onClick={props.active ? () => {setIsFocused(false); props.onClick()} : undefined}
+      onMouseEnter={props.active ? () => setIsFocused(true) : undefined}
+      onMouseLeave={props.active ? () => setIsFocused(false) : undefined}
     >
     </button>
   );

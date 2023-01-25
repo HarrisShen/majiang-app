@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Player from "./Player";
-import Editor from "./Editor";
-import { postData } from "./request";
+// import Editor from "./Editor";
+// import { postData } from "./request";
 
 function Table(props) {
   // const [players, setPlayers] = useState(["Player 1", "Player 2", "Player 3", "Player 4"]);
@@ -57,13 +57,17 @@ function Table(props) {
   //   socket.emit('game:start');
   // }
 
-  // function handleAction(type, pid, tid = null) {
-  //   if(type === 'discard') {
-  //     const playerHands = props.gameState.playerHands.slice();
-  //     console.log('discard:' + pid + ',' + playerHands[pid][tid]);
-  //   } else console.log(type + ': ' + pid);
-  //   socket.emit('game:action', type, pid, tid);
-  // }
+  function handleReady() {
+    socket.emit('game:ready');
+  }
+
+  function handleAction(type, pid, tid = null) {
+    if(type === 'discard') {
+      const playerHands = props.gameState.playerHands.slice();
+      console.log('discard:' + pid + ',' + playerHands[pid][tid]);
+    } else console.log(type + ': ' + pid);
+    socket.emit('game:action', type, pid, tid);
+  }
 
   // function toggleGodMode() {
   //   setGodMode(!godMode);
@@ -127,6 +131,7 @@ function Table(props) {
   const players = props.players.slice();
   const playerReady = props.playerReady.slice();
   const gameState = props.gameState;
+  const actions = gameState.playerActions.slice();
   const offset = players.indexOf(props.self);
   const playerList = [];
   for (let i = 0; i < players.length; i++) {
@@ -138,13 +143,30 @@ function Table(props) {
       hand: gameState.playerHands[idx],
       show: gameState.playerShows[idx],
       waste: gameState.playerWaste[idx],
+      isCurrPlayer: idx === gameState.currPlayer
     };
     // add more props if it is player themself
     if (i === 0) {
       Object.assign(playerProps, {
-        control: true,
-        readyOnClick: props.handleReady,
+        control: true
       });
+      if (props.gameStatus === 0) {
+        Object.assign(playerProps, {
+          readyOnClick: handleReady
+        });
+      } else if (props.gameStatus === 1) {
+        Object.assign(playerProps, {
+          handOnclick: ((j) => handleAction('discard', idx, j))
+        });
+      } else {
+        Object.assign(playerProps, {
+          action: actions[idx],
+          pongOnclick: (() => handleAction('pong', idx)),
+          kongOnClick: (() => handleAction('kong', idx)),
+          huOnclick: (() => handleAction('win', idx)),
+          cancelOnclick: (() => handleAction('cancel', idx))
+        });
+      }
     }
     playerList.push( <Player {...playerProps} /> )
   }

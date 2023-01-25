@@ -7,14 +7,15 @@ function Player(props) {
   // const socket = props.socket;
 
   function renderHand(i) {
-    const isActiveHand = props.control && props.active && props.status === 1;
-    const isLastDrawn = i === props.hand.length - 1 && props.hand.length % 3 === 2 && props.lastAction === 'draw';
+    // const isActiveHand = props.control && props.active && props.status === 1;
+    // const isLastDrawn = i === props.hand.length - 1 && props.hand.length % 3 === 2 && props.lastAction === 'draw';
+        // isActive={isActiveHand}
+        // isLastDrawn={isLastDrawn}    
     return (
       <Tile 
         value={props.hand[i]}
-        isActive={isActiveHand}
-        isLastDrawn={isLastDrawn}
-        onClick={() => props.handOnclick(i)}
+        active={props.control}
+        onClick={props.handOnclick ? () => props.handOnclick(i) : undefined}
       />
     );
   }
@@ -35,7 +36,7 @@ function Player(props) {
   if (props.status === 0) {
     if (props.ready) infoStr += '\u2713';
     if (props.winner) infoStr += " I win!!!";
-  } else if(props.active) {
+  } else if(props.isCurrPlayer) {
     infoStr = "<=";
   }
 
@@ -66,7 +67,7 @@ function Player(props) {
         }</button>
       );
     }
-  } else if (props.status === 2 && props.action) {
+  } else if (props.status === 2) {
     if(props.action["pong"]) {
       ctrlButtons.push(
         <button className="pong-btn" onClick={props.pongOnclick}>Pong</button>

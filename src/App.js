@@ -17,6 +17,10 @@ function App() {
     playerHands: [[], [], [], []],
     playerWaste: [[], [], [], []],
     playerShows: [[], [], [], []],
+    currPlayer: 0,
+    playerActions: [],
+    lastAction: '',
+    winner: [],
   });
 
   useEffect(() => {
@@ -81,10 +85,6 @@ function App() {
     setInputTableID(event.target.value);
   }
 
-  function handleReady() {
-    socket.emit('game:ready');
-  }
-
   let tableCtrlPanel;
   if(tableID) {
     tableCtrlPanel = (
@@ -113,7 +113,7 @@ function App() {
     playerReady: playerReady,
     gameStatus: gameStatus,
     gameState: gameState,
-    handleReady: handleReady,
+    socket: socket,
   };
 
   return (
