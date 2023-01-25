@@ -30,19 +30,14 @@ function Player(props) {
       <Tile value={props.waste[i]} />
     );
   }
-
-  // function readyOnClick() {
-  //   socket.emit('game:ready', ready, (data) => {
-  //     setReady(data.ready);
-  //   });
-  // }
     
-  let infoStr = props.ready ? '\u2713' : '';
-  // if(props.status === 0 && props.winner) {
-  //   infoStr = "I win!!!";
-  // } else if(props.status !== 0 && props.active) {
-  //   infoStr = "<=";
-  // }
+  let infoStr = '';
+  if (props.status === 0) {
+    if (props.ready) infoStr += '\u2713';
+    if (props.winner) infoStr += " I win!!!";
+  } else if(props.active) {
+    infoStr = "<=";
+  }
 
   const handTiles = [];
   if (props.hand) {

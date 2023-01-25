@@ -126,6 +126,7 @@ function Table(props) {
 
   const players = props.players.slice();
   const playerReady = props.playerReady.slice();
+  const gameState = props.gameState;
   const offset = players.indexOf(props.self);
   const playerList = [];
   for (let i = 0; i < players.length; i++) {
@@ -134,6 +135,9 @@ function Table(props) {
       id: players[idx],
       status: props.gameStatus,
       ready: playerReady[idx],
+      hand: gameState.playerHands[idx],
+      show: gameState.playerShows[idx],
+      waste: gameState.playerWaste[idx],
     };
     // add more props if it is player themself
     if (i === 0) {
@@ -147,6 +151,7 @@ function Table(props) {
 
   return (
     <div>
+      <p>Tiles left: {gameState.tiles.length}</p>
       {playerList}
     </div>
   );

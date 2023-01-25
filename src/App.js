@@ -12,7 +12,12 @@ function App() {
   const [self, setSelf] = useState('');
   const [inputTableID, setInputTableID] = useState('');
   const [gameStatus, setGameStatus] = useState(0);
-  const [gameState, setGameState] = useState({});
+  const [gameState, setGameState] = useState({
+    tiles: [],
+    playerHands: [[], [], [], []],
+    playerWaste: [[], [], [], []],
+    playerShows: [[], [], [], []],
+  });
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -32,6 +37,7 @@ function App() {
       console.log('game:' + data.gameID);
       console.log(data.gameState);
       setGameState(data.gameState);
+      setGameStatus(data.gameState.status);
     });
 
     return () => {
@@ -76,9 +82,7 @@ function App() {
   }
 
   function handleReady() {
-    socket.emit('game:ready', (data) => {
-      setPlayerReady(data.playerReady);
-    });
+    socket.emit('game:ready');
   }
 
   let tableCtrlPanel;
@@ -102,16 +106,21 @@ function App() {
     );
   }
 
+  const tableProps = {
+    tableID: tableID,
+    players: players,
+    self: self,
+    playerReady: playerReady,
+    gameStatus: gameStatus,
+    gameState: gameState,
+    handleReady: handleReady,
+  };
+
   return (
     <div>
       <h1>Play Majiang Together by R.S.</h1>
       {tableCtrlPanel}
-      {tableID && (
-        <Table 
-          tableID={tableID} players={players} self={self} playerReady={playerReady}  
-          gameStatus={gameStatus} gameState={gameState} handleReady={handleReady}
-        />
-      )}
+      {tableID && <Table {...tableProps} />}
     </div>
   );
 }
