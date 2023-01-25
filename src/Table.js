@@ -136,6 +136,13 @@ function Table(props) {
   const playerList = [];
   for (let i = 0; i < players.length; i++) {
     let idx = (i + offset) % players.length;
+    let isCurrPlayer = idx === gameState.currPlayer;
+    let control = i === 0;
+    if (props.gameStatus === 1) {
+      control &&= isCurrPlayer;
+    } else if (props.gameStatus === 2) {
+      control &&= !(Object.values(actions[idx]).every(x => !x));
+    }
     let playerProps = {
       id: players[idx],
       status: props.gameStatus,
@@ -143,28 +150,24 @@ function Table(props) {
       hand: gameState.playerHands[idx],
       show: gameState.playerShows[idx],
       waste: gameState.playerWaste[idx],
-      isCurrPlayer: idx === gameState.currPlayer
+      isCurrPlayer: isCurrPlayer,
+      control: control,
+      action: actions[idx],
     };
-    // add more props if it is player themself
-    if (i === 0) {
-      Object.assign(playerProps, {
-        control: true
-      });
+    // add more props if player needs to act
+    if (control) {
       if (props.gameStatus === 0) {
         Object.assign(playerProps, {
           readyOnClick: handleReady
         });
-      } else if (props.gameStatus === 1) {
-        Object.assign(playerProps, {
-          handOnclick: ((j) => handleAction('discard', idx, j))
-        });
       } else {
         Object.assign(playerProps, {
-          action: actions[idx],
-          pongOnclick: (() => handleAction('pong', idx)),
+          afterDraw: gameState.lastAction === 'draw',
+          handOnClick: ((j) => handleAction('discard', idx, j)),
+          pongOnClick: (() => handleAction('pong', idx)),
           kongOnClick: (() => handleAction('kong', idx)),
-          huOnclick: (() => handleAction('win', idx)),
-          cancelOnclick: (() => handleAction('cancel', idx))
+          huOnClick: (() => handleAction('win', idx)),
+          cancelOnClick: (() => handleAction('cancel', idx))
         });
       }
     }
