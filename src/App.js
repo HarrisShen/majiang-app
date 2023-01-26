@@ -6,7 +6,7 @@ import "./App.css";
 const socket = io();
 
 const initGameState = {
-  tiles: [],
+  tiles: 0,
   playerHands: [[], [], [], []],
   playerWaste: [[], [], [], []],
   playerShows: [[], [], [], []],

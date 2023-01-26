@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Player from "./Player";
 // import Editor from "./Editor";
 // import { postData } from "./request";
@@ -176,7 +176,7 @@ function Table(props) {
 
   return (
     <div>
-      <p>Tiles left: {gameState.tiles.length}</p>
+      <p>Tiles left: {gameState.tiles}</p>
       {playerList}
     </div>
   );
