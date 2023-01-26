@@ -10,7 +10,7 @@ function Player(props) {
     return (
       <Tile 
         value={props.hand[i]}
-        active={props.control}
+        active={props.control && props.status === 1}
         isLastDrawn={isLastDrawn}
         onClick={() => props.handOnClick(i)}
       />

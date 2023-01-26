@@ -5,6 +5,17 @@ import "./App.css";
 
 const socket = io();
 
+const initGameState = {
+  tiles: [],
+  playerHands: [[], [], [], []],
+  playerWaste: [[], [], [], []],
+  playerShows: [[], [], [], []],
+  currPlayer: 0,
+  playerActions: [],
+  lastAction: '',
+  winner: [],
+};
+
 function App() {
   const [tableID, setTableID] = useState('');
   const [players, setPlayers] = useState([]);
@@ -12,16 +23,7 @@ function App() {
   const [self, setSelf] = useState('');
   const [inputTableID, setInputTableID] = useState('');
   const [gameStatus, setGameStatus] = useState(0);
-  const [gameState, setGameState] = useState({
-    tiles: [],
-    playerHands: [[], [], [], []],
-    playerWaste: [[], [], [], []],
-    playerShows: [[], [], [], []],
-    currPlayer: 0,
-    playerActions: [],
-    lastAction: '',
-    winner: [],
-  });
+  const [gameState, setGameState] = useState(initGameState);
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -33,8 +35,10 @@ function App() {
     });
     
     socket.on('table:update', (data) => {
+      if (data.tableID) setTableID(data.tableID);
       if (data.players) setPlayers(data.players);
       if (data.playerReady) setPlayerReady(data.playerReady);
+      if (data.source !== 'ready') setGameState(initGameState);
     });
 
     socket.on('game:update', (data) => {
@@ -42,6 +46,11 @@ function App() {
       console.log(data.gameState);
       setGameState(data.gameState);
       setGameStatus(data.gameState.status);
+      if (data.start) {
+        socket.emit('game:renew-id', (data) => {
+          if (data.status === 'OK') console.log('session gameID updated');
+        });
+      }
     });
 
     return () => {
@@ -52,11 +61,7 @@ function App() {
   }, []);
 
   function handleCreate() {
-    socket.emit('table:create', (data) => {
-      setTableID(data.tableID);
-      setPlayers(data.players);
-      setPlayerReady(data.playerReady);
-    });
+    socket.emit('table:create');
   }
 
   function handleLeave() {

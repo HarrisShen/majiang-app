@@ -153,6 +153,7 @@ function Table(props) {
       isCurrPlayer: isCurrPlayer,
       control: control,
       action: actions[idx],
+      afterDraw: gameState.lastAction === 'draw',
     };
     // add more props if player needs to act
     if (control) {
@@ -162,7 +163,6 @@ function Table(props) {
         });
       } else {
         Object.assign(playerProps, {
-          afterDraw: gameState.lastAction === 'draw',
           handOnClick: ((j) => handleAction('discard', idx, j)),
           pongOnClick: (() => handleAction('pong', idx)),
           kongOnClick: (() => handleAction('kong', idx)),
