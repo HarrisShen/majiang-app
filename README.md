@@ -2,7 +2,7 @@
 
 This is the frontend of a Majiang game in developing. It is expected to be used with the backend API, which is dedicated for handling the logics and events of the game.
 
-Now the game play supports player against 3 bots. Function of managing room (or table) is still under development. Finally, the game is planned to be playable between four players, with options specifying them to be bots or not.
+Now the game is playable between four players. To join a table that exists, just type in the table number and click join table.
 
 ## Requirements
 
