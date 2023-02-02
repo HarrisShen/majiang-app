@@ -38,7 +38,10 @@ function App() {
       if (data.tableID) setTableID(data.tableID);
       if (data.players) setPlayers(data.players);
       if (data.playerReady) setPlayerReady(data.playerReady);
-      if (data.source !== 'ready') setGameState(initGameState);
+      if (data.source !== 'ready') {
+        setGameStatus(0);
+        setGameState(initGameState);
+      }
     });
 
     socket.on('game:update', (data) => {
@@ -60,8 +63,8 @@ function App() {
     };
   }, []);
 
-  function handleCreate() {
-    socket.emit('table:create');
+  function handleCreate(tableSize) {
+    socket.emit('table:create', tableSize);
   }
 
   function handleLeave() {
@@ -101,11 +104,13 @@ function App() {
   } else {
     tableCtrlPanel = (
       <div>
-        <button onClick={handleCreate}>Create a new Table</button><br/>
-        <p>or</p>
+        <p><strong>Create a table</strong></p>
+        <button onClick={() => handleCreate(1)}>Single-player</button><br/>
+        <button onClick={() => handleCreate(4)}>Multiplayer</button><br/>
+        <p><strong>Join a table</strong></p>
         <form onSubmit={(e) => handleJoin(e, inputTableID)}>
           <input type='text' name="table-id" onChange={handleChange} />
-          <input type='submit' value='Join a Table'/>
+          <input type='submit' value='Join'/>
         </form>
       </div>
     );
