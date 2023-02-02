@@ -50,9 +50,10 @@ function App() {
       setGameState(data.gameState);
       setGameStatus(data.gameState.status);
       if (data.start) {
-        socket.emit('game:renew-id', (data) => {
-          if (data.status === 'OK') console.log('session gameID updated');
-        });
+        // socket.emit('game:renew-id', (data) => {
+        //   if (data.status === 'OK') console.log('session gameID updated');
+        // });
+        socket.emit('game:action', null, null, null);
       }
     });
 
