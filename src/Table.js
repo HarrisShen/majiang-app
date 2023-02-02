@@ -1,5 +1,8 @@
 import React from "react";
 import Player from "./Player";
+import "./Table.css";
+
+const directions = ['S', 'E', 'N', 'W'];
 
 function Table(props) {
 
@@ -43,6 +46,7 @@ function Table(props) {
       control: control,
       action: actions[idx],
       afterDraw: gameState.lastAction === 'draw',
+      direction: directions[i]
     };
     // add more props if player needs to act
     if (control) {
@@ -66,9 +70,11 @@ function Table(props) {
   return (
     <div>
       <p>Tiles left: {gameState.tiles}</p>
-      {playerList}
+      <div className="mahjong-board">
+        {playerList}
+      </div>
     </div>
-  );
+  ); 
 }
 
 export default Table;

@@ -1,0 +1,57 @@
+.mahjong-board {
+    width: 800px;
+    height: 800px;
+    background-color: #0185a3;
+}
+
+.player-S {
+    z-index: 999;
+    width: 600px;
+    height: 200px;
+    position: relative;
+    top: 700px;
+    margin: auto;
+}
+
+.player-E {
+    width: 600px;
+    height: 200px;
+    position: relative;
+    top: 50px;
+    left: 500px;
+    rotate: -90deg;
+}
+
+.player-N {
+    width: 600px;
+    height: 200px;
+    position: relative;
+    top: -500px;
+    margin: auto;
+    rotate: 180deg;
+}
+
+.player-W {
+    width: 600px;
+    height: 200px;
+    position: relative;
+    top: -300px;
+    left: -300px;
+    rotate: 90deg;
+}
+
+.front-row {
+    display: flex;
+    align-items: center;
+}
+
+.hand-row {
+    margin-right: 15px;
+}
+
+.played-row {
+    width: 310px;
+    position: relative;
+    top: -220px;
+    left: 80px;
+}

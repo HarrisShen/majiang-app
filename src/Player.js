@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Tile from "./Tile";
 
 function Player(props) {
@@ -87,16 +87,18 @@ function Player(props) {
     }
   }
   return (
-    <div>
+    <div className={"player-" + props.direction}>
       <div className="info-row">
         <span>{props.id} {infoStr}</span>
         {ctrlButtons}
       </div>
-      <div className="hand-row">
-        {handTiles}
-      </div>
-      <div className="display-row">
-        {showTiles}
+      <div className="front-row">
+        <div className="hand-row">
+          {handTiles}
+        </div>
+        <div className="display-row">
+          {showTiles}
+        </div>        
       </div>
       <div className="played-row">
         {wasteTiles}
