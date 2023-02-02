@@ -1,6 +1,6 @@
 .tile {
-  width: 44px;
-  height: 65px;
+  width: 38px;
+  height: 56px;
   border: 0;
 }
 
@@ -14,5 +14,10 @@
 }
 
 .tile-focused {
+  position: relative;
+  top: -3px;
+}
+
+.tile-useless {
   filter: brightness(50%);
 }
