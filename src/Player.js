@@ -75,9 +75,23 @@ function Player(props) {
         );
       }
       if(props.action["chow"]) {
-        ctrlButtons.push(
-          <button className="chow-btn" onClick={props.chowOnClick}>Chow</button>
-        );
+        const chowOptions = props.action["chow"];
+        if (chowOptions.length === 1) {
+          ctrlButtons.push(
+            <button 
+              className="chow-btn" 
+              onClick={() => props.chowOnClick(chowOptions[0])}>Chow</button>
+          );
+        } else {
+          for(let i = 0; i < chowOptions.length; i++) {
+            ctrlButtons.push(
+              <button 
+                className="chow-btn" 
+                onClick={() => props.chowOnClick(chowOptions[i])}
+              >Chow {chowOptions[i]}</button>
+            );
+          }
+        }
       }
       if(props.action["hu"]) {
         ctrlButtons.push(

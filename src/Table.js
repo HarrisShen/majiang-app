@@ -59,13 +59,13 @@ function Table(props) {
           handOnClick: ((j) => handleAction('discard', idx, j)),
           pongOnClick: (() => handleAction('pong', idx)),
           kongOnClick: (() => handleAction('kong', idx)),
-          chowOnClick: (() => handleAction('chow', idx)),
-          huOnClick: (() => handleAction('win', idx)),
+          chowOnClick: ((j) => handleAction('chow', idx, j)),
+          huOnClick: (() => handleAction('hu', idx)),
           cancelOnClick: (() => handleAction('cancel', idx))
         });
       }
     }
-    playerList.push( <Player {...playerProps} /> )
+    playerList.push(<Player {...playerProps} />)
   }
 
   return (
