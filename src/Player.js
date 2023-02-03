@@ -73,7 +73,12 @@ function Player(props) {
         ctrlButtons.push(
           <button className="kong-btn" onClick={props.kongOnClick}>Kong</button>
         );
-      } 
+      }
+      if(props.action["chow"]) {
+        ctrlButtons.push(
+          <button className="chow-btn" onClick={props.chowOnClick}>Chow</button>
+        );
+      }
       if(props.action["hu"]) {
         ctrlButtons.push(
           <button className="hu-btn" onClick={props.huOnClick}>Win!</button>

@@ -59,6 +59,7 @@ function Table(props) {
           handOnClick: ((j) => handleAction('discard', idx, j)),
           pongOnClick: (() => handleAction('pong', idx)),
           kongOnClick: (() => handleAction('kong', idx)),
+          chowOnClick: (() => handleAction('chow', idx)),
           huOnClick: (() => handleAction('win', idx)),
           cancelOnClick: (() => handleAction('cancel', idx))
         });
