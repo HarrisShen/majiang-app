@@ -17,7 +17,7 @@
     width: 600px;
     height: 200px;
     position: relative;
-    top: 50px;
+    top: 80px;
     left: 500px;
     rotate: -90deg;
 }
@@ -52,6 +52,6 @@
 .played-row {
     width: 310px;
     position: relative;
-    top: -220px;
-    left: 80px;
+    top: -260px;
+    left: 60px;
 }
