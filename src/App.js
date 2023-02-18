@@ -7,9 +7,7 @@ const socket = io();
 
 const initGameState = {
   tiles: 0,
-  playerHands: [[], [], [], []],
-  playerWaste: [[], [], [], []],
-  playerShows: [[], [], [], []],
+  players:[{}, {}, {}, {}],
   currPlayer: 0,
   playerActions: [],
   lastAction: '',

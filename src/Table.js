@@ -14,8 +14,8 @@ function Table(props) {
 
   function handleAction(type, pid, tid = null) {
     if(type === 'discard') {
-      const playerHands = props.gameState.playerHands.slice();
-      console.log('discard:' + pid + ',' + playerHands[pid][tid]);
+      const playerHand = props.gameState.players[pid].hand.slice();
+      console.log('discard:' + pid + ',' + playerHand[tid]);
     } else console.log(type + ': ' + pid);
     socket.emit('game:action', type, pid, tid);
   }
@@ -39,9 +39,9 @@ function Table(props) {
       id: players[idx],
       status: props.gameStatus,
       ready: playerReady[idx],
-      hand: gameState.playerHands[idx],
-      show: gameState.playerShows[idx],
-      waste: gameState.playerWaste[idx],
+      hand: gameState.players[idx].hand,
+      show: gameState.players[idx].show,
+      waste: gameState.players[idx].waste,
       isCurrPlayer: isCurrPlayer,
       control: control,
       action: actions[idx],
