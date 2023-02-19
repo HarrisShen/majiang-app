@@ -12,6 +12,7 @@ const initGameState = {
   playerActions: [],
   lastAction: '',
   winner: [],
+  forbid: [0, 0, 0, 0],
 };
 
 function App() {

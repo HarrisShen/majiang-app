@@ -11,6 +11,7 @@ function Player(props) {
       <Tile 
         value={props.hand[i]}
         active={props.control && props.status === 1}
+        forbidden={props.forbid === parseInt(props.hand[i] / 10)}
         isLastDrawn={isLastDrawn}
         onClick={() => props.handOnClick(i)}
       />
@@ -55,7 +56,7 @@ function Player(props) {
       wasteTiles.push(renderWaste(i));
     }    
   }
-  const ctrlButtons = [];
+  let ctrlButtons = [];
   if (props.control) {
     if (props.status === 0) {
       ctrlButtons.push(
@@ -64,44 +65,53 @@ function Player(props) {
         }</button>
       );
     } else if (props.status === 2) {
-      if(props.action["pong"]) {
-        ctrlButtons.push(
-          <button className="pong-btn" onClick={props.pongOnClick}>Pong</button>
-        );
-      } 
-      if(props.action["kong"]) {
-        ctrlButtons.push(
-          <button className="kong-btn" onClick={props.kongOnClick}>Kong</button>
-        );
-      }
-      if(props.action["chow"]) {
-        const chowOptions = props.action["chow"];
-        if (chowOptions.length === 1) {
+      if (props.forbid === 0) {
+        const suits = ['Char', 'Bamboo', 'Dot', 'Wind', 'Dragon'];
+        ctrlButtons = [1, 2, 3].map((i) => (
+          <button className="forbid-btn" onClick={() => props.forbidOnClick(i)}>
+            {suits[i - 1]}
+          </button>
+        ));
+      } else {
+        if(props.action["pong"]) {
           ctrlButtons.push(
-            <button 
-              className="chow-btn" 
-              onClick={() => props.chowOnClick(chowOptions[0])}>Chow</button>
+            <button className="pong-btn" onClick={props.pongOnClick}>Pong</button>
           );
-        } else {
-          for(let i = 0; i < chowOptions.length; i++) {
+        } 
+        if(props.action["kong"]) {
+          ctrlButtons.push(
+            <button className="kong-btn" onClick={props.kongOnClick}>Kong</button>
+          );
+        }
+        if(props.action["chow"]) {
+          const chowOptions = props.action["chow"];
+          if (chowOptions.length === 1) {
             ctrlButtons.push(
               <button 
                 className="chow-btn" 
-                onClick={() => props.chowOnClick(chowOptions[i])}
-              >Chow {chowOptions[i]}</button>
+                onClick={() => props.chowOnClick(chowOptions[0])}>Chow</button>
             );
+          } else {
+            for(let i = 0; i < chowOptions.length; i++) {
+              ctrlButtons.push(
+                <button 
+                  className="chow-btn" 
+                  onClick={() => props.chowOnClick(chowOptions[i])}
+                >Chow {chowOptions[i]}</button>
+              );
+            }
           }
         }
-      }
-      if(props.action["hu"]) {
-        ctrlButtons.push(
-          <button className="hu-btn" onClick={props.huOnClick}>Win!</button>
-        );
-      }
-      if(ctrlButtons.length > 0){
-        ctrlButtons.push(
-          <button className="cancel-btn" onClick={props.cancelOnClick}>Cancel</button>          
-        );      
+        if(props.action["hu"]) {
+          ctrlButtons.push(
+            <button className="hu-btn" onClick={props.huOnClick}>Win!</button>
+          );
+        }
+        if(ctrlButtons.length > 0){
+          ctrlButtons.push(
+            <button className="cancel-btn" onClick={props.cancelOnClick}>Cancel</button>          
+          );      
+        }
       }
     }
   }

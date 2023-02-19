@@ -33,12 +33,15 @@ function Table(props) {
     if (props.gameStatus === 1) {
       control &&= isCurrPlayer;
     } else if (props.gameStatus === 2) {
-      control &&= !(Object.values(actions[idx]).every(x => !x));
+      control &&= (
+        !(Object.values(actions[idx]).every(x => !x))
+        || gameState.forbid[idx] === 0);
     }
     let playerProps = {
       id: players[idx],
       status: props.gameStatus,
       ready: playerReady[idx],
+      forbid: gameState.forbid[idx],
       hand: gameState.players[idx].hand,
       show: gameState.players[idx].show,
       waste: gameState.players[idx].waste,
@@ -61,7 +64,8 @@ function Table(props) {
           kongOnClick: (() => handleAction('kong', idx)),
           chowOnClick: ((j) => handleAction('chow', idx, j)),
           huOnClick: (() => handleAction('hu', idx)),
-          cancelOnClick: (() => handleAction('cancel', idx))
+          cancelOnClick: (() => handleAction('cancel', idx)),
+          forbidOnClick: ((j) => handleAction('forbid', idx, j))
         });
       }
     }

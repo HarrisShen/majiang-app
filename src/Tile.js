@@ -10,7 +10,8 @@ function Tile(props) {
 
   let classStr = 'tile';
   if(props.isLastDrawn) classStr += ' tile-last-drawn';
-  if(props.active && isFocused) classStr += ' tile-focused';  
+  if(props.active && isFocused) classStr += ' tile-focused'; 
+  if(props.forbidden) classStr += ' tile-forbidden';
 
   return (
     <button 
