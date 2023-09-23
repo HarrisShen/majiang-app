@@ -1,12 +1,10 @@
-class Button {
-    ctx = null;
+import Element from './Element.js';
+
+class Button extends Element {
     onClick = () => { };
 
-    constructor(width, height, x, y, color, text) {
-        this.width = width;
-        this.height = height;
-        this.x = x;
-        this.y = y;
+    constructor(parent, width, height, x, y, color, text) {
+        super(parent, x, y, width, height);
         this.color = color;
         this.text = text;
     }
@@ -25,10 +23,6 @@ class Button {
     isInside(x, y) {
         return (x >= this.x && x <= this.x + this.width
             && y >= this.y && y <= this.y + this.height);
-    }
-
-    setOnClick(onClick) {
-        this.onClick = onClick;
     }
 }
 

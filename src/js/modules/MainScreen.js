@@ -1,12 +1,9 @@
 import Container from './Container.js';
 
 class MainScreen extends Container {
-    constructor(canvas) {
-        super();
-        this.canvas = canvas;
-        this.ctx = this.canvas.getContext('2d');
-        this.width = this.canvas.width;
-        this.height = this.canvas.height;
+    constructor(ctx, width, height) {
+        super(null, 0, 0, width, height);
+        this.ctx = ctx;
     }
 
     draw() {
@@ -19,10 +16,10 @@ class MainScreen extends Container {
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
-    addComponent(component) {
-        super.addComponent(component);
-        component.ctx = this.ctx;
-    }
+    // addComponent(component) {
+    //     super.addComponent(component);
+    //     component.ctx = this.ctx;
+    // }
 
     onClick(x, y) {
         this.components.forEach(component => {
