@@ -1,14 +1,6 @@
-class Container {
-    constructor() {
-        this.components = [];
-    }
+import Element from './Element.js';
 
-    draw() {
-        this.components.forEach(component => {
-            component.draw();
-        });
-    }
-
+class Container extends Element {
     addComponent(component) {
         this.components.push(component);
     }

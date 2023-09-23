@@ -10,10 +10,13 @@ class MainScreen extends Container {
     }
 
     draw() {
+        this.drawScreen();
+        super.draw();
+    }
+
+    drawScreen() {
         this.ctx.fillStyle = '#7CB9E8'
         this.ctx.fillRect(0, 0, this.width, this.height);
-
-        super.draw();
     }
 
     addComponent(component) {
@@ -27,6 +30,7 @@ class MainScreen extends Container {
                 component.onClick();
             }
         });
+        this.draw();
     }
 }
 

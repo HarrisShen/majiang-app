@@ -22,15 +22,11 @@ joinButton.setOnClick(() => {
 mainScreen.addComponent(createButton);
 mainScreen.addComponent(joinButton);
 
-function draw() {
-    mainScreen.draw();
-
-    // const img = new Image();
-    // img.addEventListener('load', () => {
-    //     ctx.drawImage(img, 10, 10);
-    // }, false);
-    // img.src = '../../public/tiles/tile-11.png';
-}
+// const img = new Image();
+// img.addEventListener('load', () => {
+//     ctx.drawImage(img, 10, 10);
+// }, false);
+// img.src = '../../public/tiles/tile-11.png';
 
 canvas.addEventListener('click', (e) => {
     let x = e.clientX, y = e.clientY;
