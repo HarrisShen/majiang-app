@@ -1,6 +1,7 @@
 import Element from './Element.js';
 
 class Button extends Element {
+    clickable = true;
     onClick = () => { };
 
     constructor(parent, width, height, x, y, color, text) {
@@ -18,11 +19,6 @@ class Button extends Element {
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2);
-    }
-
-    isInside(x, y) {
-        return (x >= this.x && x <= this.x + this.width
-            && y >= this.y && y <= this.y + this.height);
     }
 }
 
