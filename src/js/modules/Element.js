@@ -1,6 +1,7 @@
 class Element {
     ctx = null;
     clickable = false;
+    hoverable = false;
 
     constructor(parent = null, x = 0, y = 0, width = 0, height = 0, z = 0) {
         this.parent = parent;

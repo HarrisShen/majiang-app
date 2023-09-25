@@ -1,12 +1,17 @@
 import Element from './Element.js';
 
 class Button extends Element {
-    clickable = true;
-    onClick = () => { };
+    color = '#AAAAAA';
 
-    constructor(parent, width, height, x, y, color, text) {
+    clickable = true;
+    hoverable = true;
+    onClick = () => { };
+    onMousemove = (x, y) => {
+        this.color = this.isInside(x, y) ? '#CCCCCC' : '#AAAAAA';
+    }
+
+    constructor(parent, width, height, x, y, text) {
         super(parent, x, y, width, height);
-        this.color = color;
         this.text = text;
     }
 

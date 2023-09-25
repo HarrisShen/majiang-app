@@ -1,9 +1,10 @@
 import Container from './Container.js';
 
-class MainScreen extends Container {
-    constructor(ctx, width, height) {
+class Screen extends Container {
+    constructor(ctx, width, height, color) {
         super(null, 0, 0, width, height);
         this.ctx = ctx;
+        this.color = color;
         this.focused = true;
     }
 
@@ -13,9 +14,9 @@ class MainScreen extends Container {
     }
 
     drawScreen() {
-        this.ctx.fillStyle = '#7CB9E8'
+        this.ctx.fillStyle = this.color;
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 }
 
-export default MainScreen;
+export default Screen;

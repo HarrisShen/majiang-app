@@ -13,13 +13,13 @@ class Dialog extends Container {
         this.focused = true;
         parent.focused = false;
 
-        this.closeButton = new Button(this, 40, 40, x + width - 60, y + 20, '#BBBBBB', 'X');
+        this.closeButton = new Button(this, 40, 40, x + width - 60, y + 20, 'X');
         this.closeButton.onClick = () => {
             console.log('close dialog');
             this.close();
         }
 
-        this.comfirmButton = new Button(this, 100, 40, x + width - 120, y + height - 60, '#BBBBBB', 'OK!');
+        this.comfirmButton = new Button(this, 100, 40, x + width - 120, y + height - 60, 'OK!');
     }
 
     draw() {

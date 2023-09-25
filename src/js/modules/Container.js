@@ -23,8 +23,17 @@ class Container extends Element {
     passClick(x, y) {
         this.components.forEach(component => {
             if (component.isFocused() && component.isInside(x, y)) {
-                if (component.clickable) component.onClick();
-                else component.passClick(x, y);
+                if (component instanceof Container) component.passClick(x, y);
+                else if (component.clickable) component.onClick();
+            }
+        });
+    }
+
+    passMousemove(x, y) {
+        this.components.forEach(component => {
+            if (component.isFocused()) {
+                if (component instanceof Container) component.passMousemove(x, y);
+                else if (component.hoverable) component.onMousemove(x, y);
             }
         });
     }
