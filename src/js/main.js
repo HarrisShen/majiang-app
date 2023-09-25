@@ -14,6 +14,9 @@ const createButton = new Button(
 createButton.onClick = () => {
     console.log('CREATE clicked');
     const d = new Dialog(mainScreen, '#FFFFFF');
+    d.setOnConfirm(() => {
+        console.log('OK clicked');
+    });
 };
 
 const joinButton = new Button(

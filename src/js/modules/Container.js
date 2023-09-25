@@ -10,6 +10,10 @@ class Container extends Element {
         this.components.push(component);
     }
 
+    removeComponent(component) {
+        this.components = this.components.filter(c => c !== component);
+    }
+
     draw() {
         this.components.forEach(component => {
             component.draw();
