@@ -1,5 +1,9 @@
 import Element from './Element.js';
 
+/**
+ * Base class for all container components
+ * Avoid instantiating this class directly
+ */
 class Container extends Element {
     focused = false;
     components = [];

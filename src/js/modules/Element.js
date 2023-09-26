@@ -1,3 +1,7 @@
+/**
+ * Base class for all UI elements
+ * Avoid instantiating this class directly 
+ */
 class Element {
     ctx = null;
     clickable = false;
