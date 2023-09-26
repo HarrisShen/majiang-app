@@ -10,8 +10,8 @@ class Button extends Element {
         this.color = this.isInside(x, y) ? '#CCCCCC' : '#AAAAAA';
     }
 
-    constructor(parent, width, height, x, y, text) {
-        super(parent, x, y, width, height);
+    constructor(parent, style, text) {
+        super(parent, style);
         this.text = text;
     }
 

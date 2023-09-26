@@ -8,18 +8,18 @@ class Dialog extends Container {
         const x = parent.x + parent.width / 2 - width / 2;
         const y = parent.y + parent.height / 2 - height / 2;
 
-        super(parent, x, y, width, height);
+        super(parent, {x: x, y: y, width: width, height: height});
         this.color = color;
         this.focused = true;
         parent.focused = false;
 
-        this.closeButton = new Button(this, 40, 40, x + width - 60, y + 20, 'X');
+        this.closeButton = new Button(this, {width: 40, height: 40, x: x + width - 60, y: y + 20}, 'X');
         this.closeButton.onClick = () => {
             console.log('close dialog');
             this.close();
         }
 
-        this.comfirmButton = new Button(this, 100, 40, x + width - 120, y + height - 60, 'OK!');
+        this.comfirmButton = new Button(this, {width: 100, height: 40, x: x + width - 120, y: y + height - 60}, 'OK!');
     }
 
     draw() {

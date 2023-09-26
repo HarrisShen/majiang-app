@@ -12,10 +12,10 @@ let activeScreen = null;
 
 const mainScreen = new Screen(ctx, canvas.width, canvas.height, '#7CB9E8');
 
-const gameTitle = new Label(mainScreen, canvas.width / 2, 200, 'Minimal Mahjong', '60px Arial Bold', '#000000', 'center', 'middle')
+const gameTitle = new Label(mainScreen, {x: canvas.width / 2, y: 200}, 'Minimal Mahjong', '60px Arial Bold', '#000000', 'center', 'middle')
 
 const createButton = new Button(
-    mainScreen, 200, 50, (canvas.width - 200) / 2, (canvas.height - 50) / 2, 
+    mainScreen, {width: 200, height: 50, verticalAlign: 'middle', horizontalAlign: 'center'}, 
     'Create table');
 createButton.onClick = () => {
     console.log('CREATE clicked');
@@ -27,7 +27,7 @@ createButton.onClick = () => {
 };
 
 const joinButton = new Button(
-    mainScreen, 200, 50, (canvas.width - 200) / 2, (canvas.height - 50) / 2 + 100, 
+    mainScreen, {width: 200, height: 50, y: (canvas.height - 50) / 2 + 100, horizontalAlign: 'center'}, 
     'Join table');
 joinButton.onClick = () => {
     console.log('JOIN clicked');
@@ -38,8 +38,9 @@ joinButton.onClick = () => {
 };
 
 const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
-const mainPlayerBox = new Box(gameScreen, canvas.width, 240, 0, canvas.height - 240, null, '#000000');
-const mainPlayerLabel = new Label(mainPlayerBox, canvas.width / 2, canvas.height - 200, 'Player 1', '60px Arial Bold', '#000000', 'center', 'middle');
+const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 300, x: 0, y: canvas.height - 300}, null, '#000000');
+const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 200}, 'Player 1', '60px Arial Bold', '#000000', 'center', 'middle');
+const controlBox = new Box(mainPlayerBox, {width: canvas.width, height: 80}, null, '#000000');
 
 // const img = new Image();
 // img.addEventListener('load', () => {
@@ -47,7 +48,7 @@ const mainPlayerLabel = new Label(mainPlayerBox, canvas.width / 2, canvas.height
 // }, false);
 // img.src = '../../public/tiles/tile-11.png';
 
-activeScreen = gameScreen;
+activeScreen = mainScreen;
 
 canvas.addEventListener('mousemove', (e) => {
     let x = e.offsetX, y = e.offsetY;

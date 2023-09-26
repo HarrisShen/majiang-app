@@ -4,8 +4,8 @@ class Box extends Container {
     color = null;
     outline = null;
 
-    constructor(parent, width, height, x, y, color, outline) {
-        super(parent, x, y, width, height);
+    constructor(parent, style, color, outline) {
+        super(parent, style);
         this.color = color;
         this.outline = outline;
     }

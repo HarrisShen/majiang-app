@@ -1,3 +1,5 @@
+import { applyStyle } from './styleUtils.js';
+
 /**
  * Base class for all UI elements
  * Avoid instantiating this class directly 
@@ -7,8 +9,16 @@ class Element {
     clickable = false;
     hoverable = false;
 
-    constructor(parent = null, x = 0, y = 0, width = 0, height = 0, z = 0) {
+    x = 0;
+    y = 0;
+    z = 0;
+    width = 0;
+    height = 0;
+
+    constructor(parent = null, style = {}) {
         this.parent = parent;
+        
+        let { x, y, z, width, height } = applyStyle(parent, style);
         this.x = x;
         this.y = y;
         this.z = z;

@@ -3,8 +3,8 @@ import Element from "./Element.js";
 class Label extends Element {
     text = '';
 
-    constructor(parent, x, y, text, font, color, align, baseline) {
-        super(parent, x, y);
+    constructor(parent, style, text, font, color, align, baseline) {
+        super(parent, style);
         this.text = text;
         this.font = font;
         this.color = color;

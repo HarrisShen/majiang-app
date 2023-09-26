@@ -2,7 +2,7 @@ import Container from './Container.js';
 
 class Screen extends Container {
     constructor(ctx, width, height, color) {
-        super(null, 0, 0, width, height);
+        super(null, {x: 0, y: 0, width: width, height: height});
         this.ctx = ctx;
         this.color = color;
         this.focused = true;
