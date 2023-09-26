@@ -24,7 +24,6 @@ function applyStyle(parent, style) {
 
     // apply horizontal alignment if x not specified
     if (style.x === undefined) {
-        console.log('x not specified');
         switch (style.horizontalAlign) {
             case 'left':
                 x = 0;

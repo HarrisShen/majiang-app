@@ -38,7 +38,7 @@ joinButton.onClick = () => {
 };
 
 const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
-const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 300, x: 0, y: canvas.height - 300}, null, '#000000');
+const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 300, verticalAlign: 'bottom'}, null, '#000000');
 const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 200}, 'Player 1', '60px Arial Bold', '#000000', 'center', 'middle');
 const controlBox = new Box(mainPlayerBox, {width: canvas.width, height: 80}, null, '#000000');
 
@@ -48,7 +48,7 @@ const controlBox = new Box(mainPlayerBox, {width: canvas.width, height: 80}, nul
 // }, false);
 // img.src = '../../public/tiles/tile-11.png';
 
-activeScreen = mainScreen;
+activeScreen = gameScreen;
 
 canvas.addEventListener('mousemove', (e) => {
     let x = e.offsetX, y = e.offsetY;
