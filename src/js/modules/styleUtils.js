@@ -13,6 +13,7 @@
 
 
 function applyStyle(parent, style) {
+    console.log(parent);
     let x, y, z, width, height;
 
     // apply position and size if specified

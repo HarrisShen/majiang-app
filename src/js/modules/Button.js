@@ -1,4 +1,5 @@
 import Element from './Element.js';
+import { applyStyle } from './styleUtils.js';
 
 class Button extends Element {
     color = '#AAAAAA';
@@ -16,6 +17,8 @@ class Button extends Element {
     }
 
     draw() {
+        this.evaluateStyle();
+
         this.ctx.fillStyle = this.color;
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
 

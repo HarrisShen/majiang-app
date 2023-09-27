@@ -48,7 +48,7 @@ const controlBox = new Box(mainPlayerBox, {width: canvas.width, height: 80}, nul
 // }, false);
 // img.src = '../../public/tiles/tile-11.png';
 
-activeScreen = gameScreen;
+activeScreen = mainScreen;
 
 canvas.addEventListener('mousemove', (e) => {
     let x = e.offsetX, y = e.offsetY;

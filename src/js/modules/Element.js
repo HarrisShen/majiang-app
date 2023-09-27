@@ -9,21 +9,22 @@ class Element {
     clickable = false;
     hoverable = false;
 
-    x = 0;
-    y = 0;
-    z = 0;
-    width = 0;
-    height = 0;
+    x = null;
+    y = null;
+    z = null;
+    width = null;
+    height = null;
 
     constructor(parent = null, style = {}) {
         this.parent = parent;
+        this.style = style;
         
-        let { x, y, z, width, height } = applyStyle(parent, style);
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.width = width;
-        this.height = height;
+        // let { x, y, z, width, height } = applyStyle(parent, style);
+        // this.x = x;
+        // this.y = y;
+        // this.z = z;
+        // this.width = width;
+        // this.height = height;
 
         if (parent !== null) {
             parent.addComponent(this);
@@ -32,6 +33,20 @@ class Element {
         }
     }
     
+    evaluateStyle() {
+        if (this.x !== null && this.y !== null && this.z !== null
+            && this.width !== null && this.height !== null) {
+            return;
+        }
+
+        let { x, y, z, width, height } = applyStyle(this.parent, this.style);
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.height = height;
+    }
+
     isFocused() {
         if (this.parent === null) {
             return false;

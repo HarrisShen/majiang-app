@@ -6,6 +6,7 @@ class Screen extends Container {
         this.ctx = ctx;
         this.color = color;
         this.focused = true;
+        this.evaluateStyle();
     }
 
     draw() {

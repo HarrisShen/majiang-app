@@ -11,6 +11,9 @@ class Box extends Container {
     }
 
     draw() {
+        // convert style to absolute position and size, if not already
+        this.evaluateStyle();
+
         if (this.color !== null) {
             this.ctx.fillStyle = this.color;
             this.ctx.fillRect(this.x, this.y, this.width, this.height);            
