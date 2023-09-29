@@ -14,8 +14,14 @@ const mainScreen = new Screen(ctx, canvas.width, canvas.height, '#7CB9E8');
 
 const gameTitle = new Label(mainScreen, {x: canvas.width / 2, y: 200}, 'Minimal Mahjong', '60px Arial Bold', '#000000', 'center', 'middle')
 
+const buttonBox = new Box(
+    mainScreen, 
+    {width: 250, height: 200, verticalAlign: 'middle', horizontalAlign: 'center'}, 
+    {type: 'column', padding: 20, spacing: 20}, 
+    null, null);
+
 const createButton = new Button(
-    mainScreen, {width: 200, height: 50, verticalAlign: 'middle', horizontalAlign: 'center'}, 
+    buttonBox, {width: 200, height: 50, horizontalAlign: 'center'}, 
     'Create table');
 createButton.onClick = () => {
     console.log('CREATE clicked');
@@ -27,7 +33,7 @@ createButton.onClick = () => {
 };
 
 const joinButton = new Button(
-    mainScreen, {width: 200, height: 50, y: (canvas.height - 50) / 2 + 100, horizontalAlign: 'center'}, 
+    buttonBox, {width: 200, height: 50, horizontalAlign: 'center'}, 
     'Join table');
 joinButton.onClick = () => {
     console.log('JOIN clicked');
@@ -38,9 +44,12 @@ joinButton.onClick = () => {
 };
 
 const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
-const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 300, verticalAlign: 'bottom'}, null, '#000000');
+const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 300, verticalAlign: 'bottom'}, {}, null, '#000000');
 const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 200}, 'Player 1', '60px Arial Bold', '#000000', 'center', 'middle');
-const controlBox = new Box(mainPlayerBox, {width: canvas.width, height: 80}, null, '#000000');
+const controlBox = new Box(mainPlayerBox, {width: canvas.width, height: 80}, {type: 'row', padding: 10, spacing: 20}, null, '#000000');
+const testButton1 = new Button(controlBox, {width: 200, height: 50, verticalAlign: 'middle'}, 'Test 1');
+const testButton2 = new Button(controlBox, {width: 200, height: 50, verticalAlign: 'middle'}, 'Test 2');
+const testButton3 = new Button(controlBox, {width: 200, height: 50, verticalAlign: 'middle'}, 'Test 3');
 
 // const img = new Image();
 // img.addEventListener('load', () => {

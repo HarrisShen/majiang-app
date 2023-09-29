@@ -1,4 +1,4 @@
-import { applyStyle } from './styleUtils.js';
+//import { applyStyle } from './styleUtils.js';
 
 /**
  * Base class for all UI elements
@@ -32,26 +32,14 @@ class Element {
             this.ctx = parent.ctx;
         }
     }
-    
-    evaluateStyle() {
-        if (this.x !== null && this.y !== null && this.z !== null
-            && this.width !== null && this.height !== null) {
-            return;
-        }
-
-        let { x, y, z, width, height } = applyStyle(this.parent, this.style);
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.width = width;
-        this.height = height;
-    }
 
     isFocused() {
-        if (this.parent === null) {
-            return false;
+        let ptr = this;
+        while (ptr !== null) {
+            if (ptr.focused) return true;
+            ptr = ptr.parent;
         }
-        return this.parent.isFocused();
+        return false;
     }
 
     isInside(x, y) {

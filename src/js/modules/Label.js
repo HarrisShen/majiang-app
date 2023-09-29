@@ -13,7 +13,7 @@ class Label extends Element {
     }
 
     draw() {
-        this.evaluateStyle();
+        //this.evaluateStyle();
         
         this.ctx.font = this.font;
         this.ctx.fillStyle = this.color;
