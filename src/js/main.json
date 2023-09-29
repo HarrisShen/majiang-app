@@ -1,0 +1,53 @@
+{
+  "Screen": {
+    "id": "mainScreen",
+    "width": "canvas.width",
+    "height": "canvas.height",
+    "components": [
+      {
+        "Label": {
+          "id": "gameTitle",
+          "x": "canvas.width / 2",
+          "y": 200,
+          "font": "60px Arial Bold",
+          "color": "#000000",
+          "align": "center",
+          "baseline": "middle",
+          "text": "Game Title"
+        }
+      },
+      {
+        "Box": {
+          "id": "buttonBox",
+          "width": 250,
+          "height": 200,
+          "verticalAlign": "middle",
+          "horizontalAlign": "center",
+          "layoutType": "column",
+          "padding": 20,
+          "spacing": 20,
+          "components": [
+            {
+              "Button": {
+                "id": "createButton",
+                "width": 200,
+                "height": 50,
+                "horizontalAlign": "center",
+                "text": "Create table"
+              }
+            },
+            {
+              "Button": {
+                "id": "joinButton",
+                "width": 200,
+                "height": 50,
+                "horizontalAlign": "center",
+                "text": "Join table"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
