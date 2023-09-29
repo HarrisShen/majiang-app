@@ -129,13 +129,39 @@ function applyLayout(self) {
 function applyRowLayout(self) {
     const layout = self.layout;
     const components = self.components;
-    let x = layout.padding || 0, y = layout.padding || 0;
-    x += self.x, y += self.y;
-    for (let i = 0; i < components.length; i++) {
-        const c = components[i];
-        c.x = x;
-        c.y = y;
-        x += c.width + layout.spacing;
+    const padding = layout.padding || 0;
+    const spacing = layout.spacing || 0;
+    const justify = layout.justify || 'start';
+    let x;
+    switch (justify) {
+        case 'start':
+            x = self.x + padding;
+            for (let i = 0; i < components.length; i++) {
+                components[i].x = x;
+                x += components[i].width + spacing;
+            }
+            break;
+        case 'center':
+            x = self.x;
+            let totalWidth = 0;
+            for (let i = 0; i < components.length; i++) {
+                components[i].x = x;
+                x += components[i].width + spacing;
+                totalWidth += components[i].width;
+                if (i > 0) totalWidth += spacing;
+            }
+            for (let i = 0; i < components.length; i++) {
+                components[i].x += (self.width - totalWidth) / 2;
+            }
+            break;
+        case 'end':
+            x = self.x + self.width - padding;
+            for (let i = components.length - 1; i >= 0; i--) {
+                x -= components[i].width;
+                components[i].x = x;
+                x -= spacing;
+            }
+            break;
     }
 }
 
@@ -144,14 +170,41 @@ function applyColumnLayout(self) {
     const components = self.components;
     const padding = layout.padding || 0;
     const spacing = layout.spacing || 0;
-    let y = padding;
-    y += self.y;
-    for (let i = 0; i < components.length; i++) {
-        components[i].y = y;
-        y += components[i].height + spacing;
+    const justify = layout.justify || 'start';
+    let y;
+    switch (justify) {
+        case 'start':
+            y = self.y + padding;
+            for (let i = 0; i < components.length; i++) {
+                components[i].y = y;
+                y += components[i].height + spacing;
+            }
+            break;
+        case 'center':
+            y = self.y;
+            let totalHeight = 0;
+            for (let i = 0; i < components.length; i++) {
+                components[i].y = y;
+                y += components[i].height + spacing;
+                totalHeight += components[i].height;
+                if (i > 0) totalHeight += spacing;
+            }
+            for (let i = 0; i < components.length; i++) {
+                components[i].y += (self.height - totalHeight) / 2;
+            }
+            break;
+        case 'end':
+            y = self.y + self.height - padding;
+            for (let i = components.length - 1; i >= 0; i--) {
+                y -= components[i].height;
+                components[i].y = y;
+                y -= spacing;
+            }
+            break;
     }
 }
 
+// Not tested
 function applyGridLayout(self) {
     const layout = self.layout;
     const components = self.components;

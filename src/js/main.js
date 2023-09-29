@@ -17,7 +17,7 @@ const gameTitle = new Label(mainScreen, {x: canvas.width / 2, y: 200}, 'Minimal 
 const buttonBox = new Box(
     mainScreen, 
     {width: 250, height: 200, verticalAlign: 'middle', horizontalAlign: 'center'}, 
-    {type: 'column', padding: 20, spacing: 20}, 
+    {type: 'column', justify: 'center', padding: 20, spacing: 30}, 
     null, null);
 
 const createButton = new Button(

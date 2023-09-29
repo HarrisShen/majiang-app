@@ -22,10 +22,6 @@ class Box extends Container {
         }
         super.draw();
     }
-
-    evaluateLayout() {
-        applyLayout(this, this.layout);
-    }
 }
 
 export default Box;
