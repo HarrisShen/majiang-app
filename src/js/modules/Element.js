@@ -18,13 +18,6 @@ class Element {
     constructor(parent = null, style = {}) {
         this.parent = parent;
         this.style = style;
-        
-        // let { x, y, z, width, height } = applyStyle(parent, style);
-        // this.x = x;
-        // this.y = y;
-        // this.z = z;
-        // this.width = width;
-        // this.height = height;
 
         if (parent !== null) {
             parent.addComponent(this);

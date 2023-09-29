@@ -8,8 +8,6 @@ class Container extends Element {
     focused = false;
     components = [];
 
-    // isFocused() { return this.focused; }
-
     addComponent(component) {
         this.components.push(component);
     }

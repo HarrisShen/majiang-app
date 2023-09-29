@@ -14,7 +14,7 @@
  * - type: 'row', 'column', 'grid'
  * - rows: number of rows in grid
  * - cols: number of columns in grid
- * - justify: 'start', 'center', 'end', 'space-around', 'space-between'
+ * - justify: 'start', 'center', 'end'
  * - spacing: number of pixels between elements
  * - padding: number of pixels around the outside of the layout
  */
@@ -115,18 +115,19 @@ function applyLayout(self) {
     const layout = self.layout;
     switch (layout.type) {
         case 'row':
-            applyRowLayout(self, layout);
+            applyRowLayout(self);
             break;
         case 'column':
-            applyColumnLayout(self, layout);
+            applyColumnLayout(self);
             break;
         case 'grid':
-            applyGridLayout(self, layout);
+            applyGridLayout(self);
             break;
     }
 }
 
-function applyRowLayout(self, layout) {
+function applyRowLayout(self) {
+    const layout = self.layout;
     const components = self.components;
     let x = layout.padding || 0, y = layout.padding || 0;
     x += self.x, y += self.y;
@@ -138,7 +139,8 @@ function applyRowLayout(self, layout) {
     }
 }
 
-function applyColumnLayout(self, layout) {
+function applyColumnLayout(self) {
+    const layout = self.layout;
     const components = self.components;
     const padding = layout.padding || 0;
     const spacing = layout.spacing || 0;
@@ -150,7 +152,8 @@ function applyColumnLayout(self, layout) {
     }
 }
 
-function applyGridLayout(self, layout) {
+function applyGridLayout(self) {
+    const layout = self.layout;
     const components = self.components;
     let x = layout.padding || 0, y = layout.padding || 0;
     x += self.x, y += self.y;

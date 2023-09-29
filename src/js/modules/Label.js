@@ -13,8 +13,6 @@ class Label extends Element {
     }
 
     draw() {
-        //this.evaluateStyle();
-        
         this.ctx.font = this.font;
         this.ctx.fillStyle = this.color;
         this.ctx.textAlign = this.align;
