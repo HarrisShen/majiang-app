@@ -19,6 +19,9 @@ class Element {
     // for Box, it also contains layout specification of its children
     layout = {};
 
+    #state = {};
+    #onStateChange = {};
+
     constructor(parent = null, style = {}) {
         this.parent = parent;
         this.style = style;
@@ -42,6 +45,18 @@ class Element {
     isInside(x, y) {
         return (x >= this.x && x <= this.x + this.width
             && y >= this.y && y <= this.y + this.height);
+    }
+
+    getState(key) {
+        return this.#state[key];
+    }
+
+    setState(key, value, onChange = null) {
+        this.#state[key] = value;
+        if (onChange !== null)
+            this.#onStateChange[key] = onChange;
+        if (this.#onStateChange[key] !== undefined)
+            this.#onStateChange[key]();
     }
 }
 

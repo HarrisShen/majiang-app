@@ -44,6 +44,17 @@ joinButton.onClick = () => {
     });
 };
 
+const toggleButton = new Button(
+    buttonBox, {width: 200, height: 50, horizontalAlign: 'center'},
+    'Toggle');
+toggleButton.setState('toggle', true, () => {
+    toggleButton.text = toggleButton.getState('toggle') ? 'Toggle' : 'Untoggle';
+});
+toggleButton.onClick = () => {
+    console.log('TOGGLE clicked');
+    toggleButton.setState('toggle', !toggleButton.getState('toggle'));
+};
+
 const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
 const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 240, verticalAlign: 'bottom'}, {}, null, '#000000');
 const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 200}, 'Player 1', '60px Arial Bold', '#000000', 'center', 'middle');
@@ -65,12 +76,6 @@ for (let i = 0; i < 13; i++) {
         this.style.verticalAlign = this.isInside(x, y) ? 'top' : 'bottom';
     });
 }
-
-// const img = new Image();
-// img.addEventListener('load', () => {
-//     ctx.drawImage(img, 10, 10);
-// }, false);
-// img.src = '../../public/tiles/tile-11.png';
 
 activeScreen = gameScreen;
 

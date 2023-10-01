@@ -1,7 +1,11 @@
 import Element from "./Element.js";
 
 class ImageBlock extends Element {
+    clickable = true;
     hoverable = true;
+
+    onClick = () => {};
+    onMousemove = () => {};
     
     src = null;
     img = null;
