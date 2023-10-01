@@ -56,18 +56,20 @@ function evalShape(self) {
 
 function evalPos(self) {
     const style = self.style;
+    const layout = self.layout;
     const parent = self.parent;
     let x, y, z;
 
     // apply position if specified
-    x = style.x || self.x;
-    y = style.y || self.y;
-    z = style.z || self.z;
+    x = style.x || layout.x || self.x || 0;
+    y = style.y || layout.y || self.y || 0;
+    z = style.z || self.z || 0;
 
     // apply horizontal alignment if x not specified
-    if (style.x === undefined && self.x === null) {
+    if (style.x === undefined && layout.x === undefined) {
         //console.log('x not specified');
-        switch (style.horizontalAlign) {
+        const hAlign = style.horizontalAlign || 'left';
+        switch (hAlign) {
             case 'left':
                 x = 0;
                 break;
@@ -82,9 +84,10 @@ function evalPos(self) {
     }
 
     // apply vertical alignment if y not specified
-    if (style.y === undefined && self.y === null) {
+    if (style.y === undefined && layout.y === undefined) {
         //console.log('y not specified');
-        switch (style.verticalAlign) {
+        const vAlign = style.verticalAlign || 'top';
+        switch (vAlign) {
             case 'top':
                 y = 0;
                 break;
@@ -97,10 +100,6 @@ function evalPos(self) {
         }
         y += parent.y;
     }
-
-    x = x || 0;
-    y = y || 0;
-    z = z || 0;
 
     //console.log(`type: ${self.constructor.name} x: ${x}, y: ${y}, z: ${z}`);
     self.x = x;
@@ -137,7 +136,7 @@ function applyRowLayout(self) {
         case 'start':
             x = self.x + padding;
             for (let i = 0; i < components.length; i++) {
-                components[i].x = x;
+                components[i].layout.x = x;
                 x += components[i].width + spacing;
             }
             break;
@@ -145,20 +144,20 @@ function applyRowLayout(self) {
             x = self.x;
             let totalWidth = 0;
             for (let i = 0; i < components.length; i++) {
-                components[i].x = x;
+                components[i].layout.x = x;
                 x += components[i].width + spacing;
                 totalWidth += components[i].width;
                 if (i > 0) totalWidth += spacing;
             }
             for (let i = 0; i < components.length; i++) {
-                components[i].x += (self.width - totalWidth) / 2;
+                components[i].layout.x += (self.width - totalWidth) / 2;
             }
             break;
         case 'end':
             x = self.x + self.width - padding;
             for (let i = components.length - 1; i >= 0; i--) {
                 x -= components[i].width;
-                components[i].x = x;
+                components[i].layout.x = x;
                 x -= spacing;
             }
             break;
@@ -176,7 +175,7 @@ function applyColumnLayout(self) {
         case 'start':
             y = self.y + padding;
             for (let i = 0; i < components.length; i++) {
-                components[i].y = y;
+                components[i].layout.y = y;
                 y += components[i].height + spacing;
             }
             break;
@@ -184,20 +183,20 @@ function applyColumnLayout(self) {
             y = self.y;
             let totalHeight = 0;
             for (let i = 0; i < components.length; i++) {
-                components[i].y = y;
+                components[i].layout.y = y;
                 y += components[i].height + spacing;
                 totalHeight += components[i].height;
                 if (i > 0) totalHeight += spacing;
             }
             for (let i = 0; i < components.length; i++) {
-                components[i].y += (self.height - totalHeight) / 2;
+                components[i].layout.y += (self.height - totalHeight) / 2;
             }
             break;
         case 'end':
             y = self.y + self.height - padding;
             for (let i = components.length - 1; i >= 0; i--) {
                 y -= components[i].height;
-                components[i].y = y;
+                components[i].layout.y = y;
                 y -= spacing;
             }
             break;

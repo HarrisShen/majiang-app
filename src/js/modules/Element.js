@@ -15,6 +15,10 @@ class Element {
     width = null;
     height = null;
 
+    // storage for layout managed values
+    // for Box, it also contains layout specification of its children
+    layout = {};
+
     constructor(parent = null, style = {}) {
         this.parent = parent;
         this.style = style;

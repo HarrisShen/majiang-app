@@ -1,6 +1,8 @@
 import Element from "./Element.js";
 
 class ImageBlock extends Element {
+    hoverable = true;
+    
     src = null;
     img = null;
 

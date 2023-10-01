@@ -6,7 +6,8 @@ class Box extends Container {
 
     constructor(parent, style, layout, color, outline) {
         super(parent, style);
-        this.layout = layout;
+        // this.layout = layout;
+        this.layout = Object.assign(this.layout, layout);
         this.color = color;
         this.outline = outline;
     }
