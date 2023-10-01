@@ -61,14 +61,21 @@ const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas
 const profileBox = new Box(mainPlayerBox, {width: 80, height: 100, verticalAlign: 'top', horizontalAlign: 'left'}, {}, null, '#000000');
 const controlBox = new Box(mainPlayerBox, {x: 80, width: canvas.width - 100, height: 50}, {type: 'row', padding: 20, spacing: 20}, null, '#000000');
 const readyButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Ready');
+
 readyButton.onClick = () => {
     console.log('READY clicked');
+    controlBox.setState('ready', !controlBox.getState('ready'));
 };
 const leaveButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Leave');
-leaveButton.onClick = () => {
+leaveButton.setOnClick(() => {
     console.log('LEAVE clicked');
     activeScreen = mainScreen;
-};
+});
+controlBox.setState('ready', false, () => {
+    readyButton.text = controlBox.getState('ready') ? 'Cancel' : 'Ready';
+    leaveButton.style.disabled = controlBox.getState('ready');
+});
+
 const handBox = new Box(mainPlayerBox, {x:50, width: 884, height: 120, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
 for (let i = 0; i < 13; i++) {
     const tile = new ImageBlock(handBox, {width: 68, height: 100, verticalAlign: 'bottom'}, '../../public/tiles/tile-11.png');
