@@ -4,6 +4,7 @@
  * This module contains functions for applying styles to UI elements.
  * Style keys:
  * - x, y: position, absolute coordiate on canvas
+ * - xOffset, yOffset: position, relative to parent
  * - width, height: size, absolute in pixels, mandatory for all elements
  * - z: z-index, higher values are drawn on top of lower values
  * - verticalAlign: 'top', 'middle', 'bottom'
@@ -57,12 +58,12 @@ function evalShape(self) {
 function evalPos(self) {
     const style = self.style;
     const layout = self.layout;
-    const parent = self.parent;
+    const parent = self.parent || {};
     let x, y, z;
 
     // apply position if specified
-    x = style.x || layout.x || self.x || 0;
-    y = style.y || layout.y || self.y || 0;
+    x = style.x || style.xOffset + parent.x || layout.x || self.x || 0;
+    y = style.y || style.yOffset + parent.y || layout.y || self.y || 0;
     z = style.z || self.z || 0;
 
     // apply horizontal alignment if x not specified

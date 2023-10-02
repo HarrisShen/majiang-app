@@ -6,8 +6,7 @@ import Box from "./modules/Box.js";
 import Label from "./modules/Label.js";
 import ImageBlock from "./modules/ImageBlock.js";
 import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
-
-const socket = io("http://localhost:9000");
+import socketSetup from "./socket.js";
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -115,12 +114,6 @@ window.addEventListener('load', () => {
     app.activeScreen.draw();
 });
 
-socket.on('connect', () => {
-    console.log('app socket connected');
-});
 
-socket.on('table:update', (data) => {
-    console.log('table:update -');
-    console.log(data);
-    app.setState('tableID', data.tableID);
-});
+const socket = io("http://localhost:9000");
+socketSetup(socket, app);
