@@ -1,15 +1,19 @@
+import Element from "./modules/Element.js";
 import Screen from "./modules/Screen.js";
 import Button from "./modules/Button.js";
 import Dialog from "./modules/Dialog.js";
 import Box from "./modules/Box.js";
 import Label from "./modules/Label.js";
 import ImageBlock from "./modules/ImageBlock.js";
+import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+
+const socket = io("http://localhost:9000");
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 console.log("canvas: " + canvas.width + "x" + canvas.height);
 
-let activeScreen = null;
+const app = new Element();
 
 const mainScreen = new Screen(ctx, canvas.width, canvas.height, '#7CB9E8');
 
@@ -29,7 +33,8 @@ createButton.onClick = () => {
     const d = new Dialog(mainScreen, '#FFFFFF');
     d.setOnConfirm(() => {
         console.log('OK clicked');
-        activeScreen = gameScreen;
+        socket.emit('table:create', 1);
+        // activeScreen = gameScreen;
     });
 };
 
@@ -56,8 +61,8 @@ toggleButton.onClick = () => {
 };
 
 const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
-const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 240, verticalAlign: 'bottom'}, {}, null, '#000000');
-const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 200}, 'Player 1', '60px Arial Bold', '#000000', 'center', 'middle');
+const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 220, verticalAlign: 'bottom'}, {}, null, '#000000');
+const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 160}, 'Player 1', '60px Arial Bold', '#666666', 'center', 'middle');
 const profileBox = new Box(mainPlayerBox, {width: 80, height: 100, verticalAlign: 'top', horizontalAlign: 'left'}, {}, null, '#000000');
 const controlBox = new Box(mainPlayerBox, {x: 80, width: canvas.width - 100, height: 50}, {type: 'row', padding: 20, spacing: 20}, null, '#000000');
 const readyButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Ready');
@@ -69,36 +74,53 @@ readyButton.onClick = () => {
 const leaveButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Leave');
 leaveButton.setOnClick(() => {
     console.log('LEAVE clicked');
-    activeScreen = mainScreen;
+    socket.emit('table:leave', (data) => {
+        app.setState('tableID', data.tableID);
+    });
+    // activeScreen = mainScreen;
 });
 controlBox.setState('ready', false, () => {
     readyButton.text = controlBox.getState('ready') ? 'Cancel' : 'Ready';
     leaveButton.style.disabled = controlBox.getState('ready');
 });
 
-const handBox = new Box(mainPlayerBox, {x:50, width: 884, height: 120, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
+const handBox = new Box(mainPlayerBox, {x:70, width: 832, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
 for (let i = 0; i < 13; i++) {
-    const tile = new ImageBlock(handBox, {width: 68, height: 100, verticalAlign: 'bottom'}, '../../public/tiles/tile-11.png');
+    const tile = new ImageBlock(handBox, {width: 64, height: 96, verticalAlign: 'bottom'}, '../../public/tiles/tile-11.png');
     tile.onMousemove = (function (x, y) {
         this.style.verticalAlign = this.isInside(x, y) ? 'top' : 'bottom';
     });
 }
 
-activeScreen = gameScreen;
+app.activeScreen = mainScreen;
+app.setState('tableID', null, () => {
+    app.activeScreen = app.getState('tableID') ? gameScreen : mainScreen;
+    app.activeScreen.draw();
+});
 
 canvas.addEventListener('mousemove', (e) => {
     let x = e.offsetX, y = e.offsetY;
-    activeScreen.passMousemove(x, y);
-    activeScreen.draw();
+    app.activeScreen.passMousemove(x, y);
+    app.activeScreen.draw();
 });
 
 canvas.addEventListener('click', (e) => {
     let x = e.offsetX, y = e.offsetY;
     console.log(x + ',' + y);
-    activeScreen.passClick(x, y);
-    activeScreen.draw();
+    app.activeScreen.passClick(x, y);
+    app.activeScreen.draw();
 });
 
 window.addEventListener('load', () => {
-    activeScreen.draw();
+    app.activeScreen.draw();
+});
+
+socket.on('connect', () => {
+    console.log('app socket connected');
+});
+
+socket.on('table:update', (data) => {
+    console.log('table:update -');
+    console.log(data);
+    app.setState('tableID', data.tableID);
 });

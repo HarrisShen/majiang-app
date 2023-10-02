@@ -1,6 +1,6 @@
-import Element from "./Element.js";
+import Component from "./Component.js";
 
-class ImageBlock extends Element {
+class ImageBlock extends Component {
     clickable = true;
     hoverable = true;
 

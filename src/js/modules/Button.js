@@ -1,6 +1,6 @@
-import Element from './Element.js';
+import Component from './Component.js';
 
-class Button extends Element {
+class Button extends Component {
     color = '#AAAAAA';
     fontColor = '#000000';
 

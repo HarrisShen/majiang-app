@@ -1,10 +1,10 @@
-import Element from './Element.js';
+import Component from './Component.js';
 
 /**
  * Base class for all container components
  * Avoid instantiating this class directly
  */
-class Container extends Element {
+class Container extends Component {
     focused = false;
     components = [];
 

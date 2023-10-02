@@ -1,6 +1,6 @@
-import Element from "./Element.js";
+import Component from "./Component.js";
 
-class Label extends Element {
+class Label extends Component {
     text = '';
 
     constructor(parent, style, text, font, color, align, baseline) {
