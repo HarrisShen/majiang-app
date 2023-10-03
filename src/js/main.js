@@ -61,9 +61,11 @@ toggleButton.onClick = () => {
 };
 
 const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
+const tableIDLable = new Label(gameScreen, {x: 8, y: 12}, 'Table ID: ', '20px Arial Bold', '#000000', 'left', 'top');
 const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 220, verticalAlign: 'bottom'}, {}, null, '#000000');
 const mainPlayerLabel = new Label(mainPlayerBox, {x: canvas.width / 2, y: canvas.height - 160}, 'Player 1', '60px Arial Bold', '#666666', 'center', 'middle');
 const profileBox = new Box(mainPlayerBox, {width: 80, height: 100, verticalAlign: 'top', horizontalAlign: 'left'}, {}, null, '#000000');
+const usernameLabel = new Label(profileBox, {verticalAlign: 'bottom', horizontalAlign: 'left'}, 'Username', '20px Arial', '#FFFFFF', 'left', 'bottom');
 const controlBox = new Box(mainPlayerBox, {x: 80, width: canvas.width - 100, height: 50}, {type: 'row', padding: 20, spacing: 20}, null, '#000000');
 const readyButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Ready');
 
@@ -95,7 +97,14 @@ for (let i = 0; i < 13; i++) {
 app.activeScreen = mainScreen;
 app.setState('tableID', null, () => {
     app.activeScreen = app.tableID ? gameScreen : mainScreen;
+    tableIDLable.text = 'Table ID: ' + app.tableID;
     app.activeScreen.draw();
+});
+app.setState('self', '', () => {
+    usernameLabel.text = app.self;
+});
+app.setState('players', [], () => {
+    console.log(app.players);
 });
 
 canvas.addEventListener('mousemove', (e) => {

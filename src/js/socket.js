@@ -9,7 +9,8 @@ function socketSetup(socket, app) {
 
     socket.on('table:update', (data) => {
         console.log(data);
-        if (data.tableID) app.tableID = data.tableID; // app.setState('tableID', data.tableID);
+        if (data.tableID) app.tableID = data.tableID;
+        if (data.players) app.players = data.players;
     });
 }
 
