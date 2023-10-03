@@ -3,11 +3,14 @@ function socketSetup(socket, app) {
         console.log('app socket connected');
     });
 
+    socket.on('player:init', (data) => {
+        app.setState('self', data.self);
+    });
+
     socket.on('table:update', (data) => {
-        console.log('table:update -');
         console.log(data);
-        app.setState('tableID', data.tableID);
-    });    
+        if (data.tableID) app.tableID = data.tableID; // app.setState('tableID', data.tableID);
+    });
 }
 
 export default socketSetup;

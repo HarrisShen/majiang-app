@@ -15,6 +15,16 @@ class Element {
     }
 
     setState(key, value, onChange = null) {
+        if (this.#state[key] === undefined) {
+            Object.defineProperty(this.constructor.prototype, key, {
+                get: function() {
+                    return this.#state[key];
+                },
+                set: function(value) {
+                    this.setState(key, value);
+                }            
+            });
+        }
         this.#state[key] = value;
         if (onChange !== null)
             this.#onStateChange[key] = onChange;
