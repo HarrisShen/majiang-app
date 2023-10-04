@@ -4,7 +4,8 @@ import Button from "./modules/Button.js";
 import Dialog from "./modules/Dialog.js";
 import Box from "./modules/Box.js";
 import Label from "./modules/Label.js";
-import ImageBlock from "./modules/ImageBlock.js";
+// import ImageBlock from "./modules/ImageBlock.js";
+import { Tile } from "./custom.js";
 import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 import socketSetup from "./socket.js";
 
@@ -88,10 +89,7 @@ controlBox.setState('ready', false, () => {
 
 const handBox = new Box(mainPlayerBox, {x:70, width: 832, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
 for (let i = 0; i < 13; i++) {
-    const tile = new ImageBlock(handBox, {width: 64, height: 96, verticalAlign: 'bottom'}, '../../public/tiles/tile-11.png');
-    tile.onMousemove = (function (x, y) {
-        this.style.verticalAlign = this.isInside(x, y) ? 'top' : 'bottom';
-    });
+    Tile(handBox);
 }
 
 app.activeScreen = mainScreen;
