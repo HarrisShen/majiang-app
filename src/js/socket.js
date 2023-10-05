@@ -1,16 +1,20 @@
-function socketSetup(socket, app) {
+function socketSetup(socket, app, gameScreen) {
     socket.on('connect', () => {
         console.log('app socket connected');
     });
 
     socket.on('player:init', (data) => {
-        app.setState('self', data.self);
+        // app.setState('self', data.self);
+        gameScreen.self = data.self;
     });
 
     socket.on('table:update', (data) => {
         console.log(data);
-        if (data.tableID) app.tableID = data.tableID;
-        if (data.players) app.players = data.players;
+        if (data.tableID) {
+            app.tableID = data.tableID;
+            gameScreen.tableID = data.tableID;
+        }
+        if (data.players) gameScreen.players = data.players;
     });
 
     socket.on('game:update', (data) => {

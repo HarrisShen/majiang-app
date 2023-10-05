@@ -16,7 +16,7 @@ class Element {
 
     setState(key, value, onChange = null) {
         if (this.#state[key] === undefined) {
-            Object.defineProperty(this.constructor.prototype, key, {
+            Object.defineProperty(this, key, {
                 get: function() {
                     return this.#state[key];
                 },

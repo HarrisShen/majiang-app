@@ -1,4 +1,4 @@
-import ImageBlock from "./modules/ImageBlock.js";
+import ImageBlock from "../base/ImageBlock.js";
 
 function Tile(parent, tileID) {
     const src = '../../public/tiles/tile-' + tileID + '.png';
@@ -9,4 +9,4 @@ function Tile(parent, tileID) {
     return self;
 }
 
-export { Tile };
+export default Tile;

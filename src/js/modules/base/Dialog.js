@@ -19,7 +19,7 @@ class Dialog extends Container {
             this.close();
         }
 
-        this.comfirmButton = new Button(this, {width: 100, height: 40, x: x + width - 120, y: y + height - 60}, 'OK!');
+        this.confirmButton = new Button(this, {width: 100, height: 40, x: x + width - 120, y: y + height - 60}, 'OK!');
     }
 
     draw() {
@@ -34,10 +34,10 @@ class Dialog extends Container {
     }
 
     setOnConfirm(callback) {
-        this.comfirmButton.onClick = () => {
+        this.confirmButton.setOnClick(() => {
             callback();
             this.close();
-        }
+        });
     }
 }
 
