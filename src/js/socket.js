@@ -12,6 +12,15 @@ function socketSetup(socket, app) {
         if (data.tableID) app.tableID = data.tableID;
         if (data.players) app.players = data.players;
     });
+
+    socket.on('game:update', (data) => {
+        console.log('game:' + data.gameID);
+        console.log(data.gameState);
+        app.gameState = data.gameState;
+        if (data.start) {
+            socket.emit('game:action', null, null, null);
+        }
+    });
 }
 
 export default socketSetup;

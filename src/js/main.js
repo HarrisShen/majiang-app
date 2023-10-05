@@ -88,10 +88,22 @@ controlBox.setState('ready', false, () => {
 });
 
 const handBox = new Box(mainPlayerBox, {x:70, width: 832, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
-for (let i = 0; i < 13; i++) {
-    Tile(handBox);
-}
+handBox.setState('tiles', [], () => {
+    handBox.removeAll();
+    for (let i = 0; i < handBox.tiles.length; i++) {
+        Tile(handBox, handBox.tiles[i]);
+    }
+});
 
+// for (let i = 0; i < 13; i++) {
+//     Tile(handBox);
+// }
+
+const leftPlayerBox = new Box(gameScreen, {y: 40, width: 160, height: canvas.height - 260, horizontalAlign: 'left'}, {}, null, '#000000');
+
+const topPlayerBox = new Box(gameScreen, {x: 160, width: canvas.width - 320, height: 160, verticalAlign: 'top'}, {}, null, '#000000');
+
+const rightPlayerBox = new Box(gameScreen, {y: 40, width: 160, height: canvas.height - 260, horizontalAlign: 'right'}, {}, null, '#000000');
 app.activeScreen = mainScreen;
 app.setState('tableID', null, () => {
     app.activeScreen = app.tableID ? gameScreen : mainScreen;
@@ -103,6 +115,13 @@ app.setState('self', '', () => {
 });
 app.setState('players', [], () => {
     console.log(app.players);
+});
+app.setState('gameState', {}, () => {
+    if (app.gameState.players !== undefined
+        || app.gameState.currPlayer !== 0
+        || app.gameState.forbid !== 0) {
+        handBox.tiles = app.gameState.players[0].hand;
+    }
 });
 
 canvas.addEventListener('mousemove', (e) => {

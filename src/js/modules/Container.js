@@ -16,6 +16,10 @@ class Container extends Component {
         this.components = this.components.filter(c => c !== component);
     }
 
+    removeAll() {
+        this.components = [];
+    }
+
     draw() {
         this.components.forEach(component => {
             component.draw();
