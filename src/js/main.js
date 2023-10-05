@@ -27,13 +27,7 @@ app.setState('tableID', null, () => {
     }
     app.activeScreen.draw();
 });
-app.setState('gameState', {}, () => {
-    if (app.gameState.players !== undefined
-        && app.gameState.currPlayer !== 0
-        && app.gameState.forbid !== 0) {
-        handBox.tiles = app.gameState.players[0].hand;
-    }
-});
+app.setState('self', '', () => {});
 
 canvas.addEventListener('mousemove', (e) => {
     let x = e.offsetX, y = e.offsetY;
@@ -52,14 +46,13 @@ window.addEventListener('load', () => {
     app.activeScreen.draw();
 });
 
-// socketSetup(socket, app, gameScreen);
 socket.on('connect', () => {
     console.log('app socket connected');
 });
 
 socket.on('player:init', (data) => {
-    // app.setState('self', data.self);
-    gameScreen.self = data.self;
+    // app.self = data.self;
+    console.log(data);
 });
 
 socket.on('table:update', (data) => {
@@ -74,7 +67,7 @@ socket.on('table:update', (data) => {
 socket.on('game:update', (data) => {
     console.log('game:' + data.gameID);
     console.log(data.gameState);
-    app.gameState = data.gameState;
+    gameScreen.gameState = data.gameState;
     if (data.start) {
         socket.emit('game:action', null, null, null);
     }

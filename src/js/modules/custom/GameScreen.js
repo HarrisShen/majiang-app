@@ -2,6 +2,7 @@ import Screen from "../base/Screen.js";
 import Label from "../base/Label.js";
 import Box from "../base/Box.js";
 import Button from "../base/Button.js";
+import Tile from "./Tile.js";
 
 function GameScreen(ctx, canvas, socket, app) {
     const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
@@ -47,11 +48,16 @@ function GameScreen(ctx, canvas, socket, app) {
     gameScreen.setState('tableID', null, () => {
         tableIDLable.text = 'Table ID: ' + gameScreen.tableID;
     });
-    gameScreen.setState('self', '', () => {
-        mainPlayerLabel.text = gameScreen.self;
-    });
     gameScreen.setState('players', [], () => {
-        console.log(gameScreen.players);
+        if (gameScreen.players.length > 0)
+            usernameLabel.text = gameScreen.players[0];
+    });
+    gameScreen.setState('gameState', {}, () => {
+        if (gameScreen.gameState.players !== undefined
+            && gameScreen.gameState.currPlayer !== 0
+            && gameScreen.gameState.forbid !== 0) {
+            handBox.tiles = gameScreen.gameState.players[0].hand;
+        }
     });
 
     return gameScreen;
