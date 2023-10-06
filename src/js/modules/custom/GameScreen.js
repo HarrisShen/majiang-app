@@ -23,7 +23,7 @@ function GameScreen(ctx, canvas, socket, app) {
     leaveButton.setOnClick(() => {
         console.log('LEAVE clicked');
         socket.emit('table:leave', (data) => {
-            app.setState('tableID', data.tableID);
+            app.mode = 'main';
         });
     });
     controlBox.setState('ready', false, () => {

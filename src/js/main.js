@@ -11,19 +11,15 @@ console.log("canvas: " + canvas.width + "x" + canvas.height);
 
 const app = new Element();
 
-let mainScreen = MainScreen(ctx, canvas, socket);
-let gameScreen = GameScreen(ctx, canvas, socket, app);
+let mainScreen, gameScreen;
 
-app.activeScreen = mainScreen;
-
-app.setState('tableID', null, () => {
-    if (app.tableID) {
-        gameScreen = GameScreen(ctx, canvas, socket, app);
-        app.activeScreen = gameScreen;
-        gameScreen.tableID = app.tableID;
-    } else {
+app.setState('mode', 'main', () => {
+    if (app.mode === 'main') {
         mainScreen = MainScreen(ctx, canvas, socket);
         app.activeScreen = mainScreen;
+    } else if (app.mode === 'game') {
+        gameScreen = GameScreen(ctx, canvas, socket, app);
+        app.activeScreen = gameScreen;
     }
     app.activeScreen.draw();
 });
@@ -51,17 +47,23 @@ socket.on('connect', () => {
 });
 
 socket.on('player:init', (data) => {
-    // app.self = data.self;
     console.log(data);
 });
 
 socket.on('table:update', (data) => {
     console.log(data);
-    if (data.tableID) {
-        app.tableID = data.tableID;
+    if (data.source === 'create') {
+        app.mode = 'game';
         gameScreen.tableID = data.tableID;
+        gameScreen.players = data.players;
+        gameScreen.playerReady = data.playerReady;
+    } else if (data.source === 'leave' || data.source === 'join') {
+        gameScreen.players = data.players;
+        gameScreen.playerReady = data.playerReady;
+    } else if (data.source === 'ready') {
+        gameScreen.playerReady = data.playerReady;
     }
-    if (data.players) gameScreen.players = data.players;
+    app.activeScreen.draw();
 });
 
 socket.on('game:update', (data) => {
@@ -71,4 +73,5 @@ socket.on('game:update', (data) => {
     if (data.start) {
         socket.emit('game:action', null, null, null);
     }
+    app.activeScreen.draw();
 });
