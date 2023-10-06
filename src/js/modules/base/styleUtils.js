@@ -50,6 +50,11 @@ class BfsIterator {
 
 function evalShape(self) {
     const style = self.style;
+    if (style.hidden) {
+        self.width = 0;
+        self.height = 0;
+        return;
+    }
     self.width = style.width || 0;
     self.height = style.height || 0;
     //console.log(`type: ${self.constructor.name}, width: ${self.width}, height: ${self.height}`);
@@ -128,7 +133,7 @@ function applyLayout(self) {
 
 function applyRowLayout(self) {
     const layout = self.layout;
-    const components = self.components;
+    const components = self.components.filter((c) => !c.style.hidden);
     const padding = layout.padding || 0;
     const spacing = layout.spacing || 0;
     const justify = layout.justify || 'start';

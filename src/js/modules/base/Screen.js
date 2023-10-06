@@ -24,13 +24,14 @@ class Screen extends Container {
             iter.next();
         }
         iter.setNode(this);
-        while (iter.node !== null) {
+        for (; iter.node !== null; iter.next()) {
             let node = iter.node;
             //console.log(`evaluating position for ${node.constructor.name}`);
+            if (node.style.hidden) continue;
             evalPos(node);
             if (node.layout !== undefined)
                 applyLayout(node, node.layout);
-            iter.next();
+            // iter.next();
         }
     }
 

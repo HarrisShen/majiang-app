@@ -12,11 +12,11 @@ function GameScreen(ctx, canvas, socket, app) {
     const profileBox = new Box(mainPlayerBox, {width: 80, height: 100, verticalAlign: 'top', horizontalAlign: 'left'}, {}, null, '#000000');
     const usernameLabel = new Label(profileBox, {verticalAlign: 'bottom', horizontalAlign: 'left'}, 'Username', '20px Arial', '#FFFFFF', 'left', 'bottom');
     const controlBox = new Box(mainPlayerBox, {x: 80, width: canvas.width - 100, height: 50}, {type: 'row', padding: 20, spacing: 20}, null, '#000000');
+    
     const readyButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Ready');
-
     readyButton.onClick = () => {
         console.log('READY clicked');
-        controlBox.ready = !controlBox.ready;
+        // controlBox.ready = !controlBox.ready;
         socket.emit('game:ready');
     };
     const leaveButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Leave');
@@ -26,6 +26,12 @@ function GameScreen(ctx, canvas, socket, app) {
             app.mode = 'main';
         });
     });
+    const chowButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Chow');
+    const pongButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pong');
+    const kongButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Kong');
+    const winButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Win');
+    const passButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pass');
+
     controlBox.setState('ready', false, () => {
         readyButton.text = controlBox.ready ? 'Cancel' : 'Ready';
         leaveButton.style.disabled = controlBox.ready;
@@ -49,15 +55,35 @@ function GameScreen(ctx, canvas, socket, app) {
         tableIDLable.text = 'Table ID: ' + gameScreen.tableID;
     });
     gameScreen.setState('players', [], () => {
-        if (gameScreen.players.length > 0)
-            usernameLabel.text = gameScreen.players[0];
+        if (gameScreen.players.length === 0) return;
+        usernameLabel.text = gameScreen.players[0];
+    });
+    gameScreen.setState('playerReady', [], () => {
+        if (gameScreen.playerReady.length === 0) return;
+        controlBox.ready = gameScreen.playerReady[0];
     });
     gameScreen.setState('gameState', {}, () => {
-        if (gameScreen.gameState.players !== undefined
-            && gameScreen.gameState.currPlayer !== 0
-            && gameScreen.gameState.forbid !== 0) {
-            handBox.tiles = gameScreen.gameState.players[0].hand;
+        const gameState = gameScreen.gameState;
+        if (gameState.players === undefined) return;
+        const controlButtons = controlBox.components;
+        controlButtons.forEach((button) => {
+            button.style.hidden = true;
+        });
+        if (gameState.status === 0) {
+            readyButton.style.hidden = false;
+            leaveButton.style.hidden = false;
+        } else if (gameState.status === 2) {
+            if (gameState.playerActions[0].pong)
+                pongButton.style.hidden = false;
+            if (gameState.playerActions[0].kong)
+                kongButton.style.hidden = false;
+            if (gameState.playerActions[0].chow)
+                chowButton.style.hidden = false;
+            if (gameState.playerActions[0].hu)
+                winButton.style.hidden = false;
+            passButton.style.hidden = false;
         }
+        handBox.tiles = gameState.players[0].hand;
     });
 
     return gameScreen;

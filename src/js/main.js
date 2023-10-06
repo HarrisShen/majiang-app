@@ -60,7 +60,7 @@ socket.on('table:update', (data) => {
     } else if (data.source === 'leave' || data.source === 'join') {
         gameScreen.players = data.players;
         gameScreen.playerReady = data.playerReady;
-    } else if (data.source === 'ready') {
+    } else if (data.source === 'reset-ready') {
         gameScreen.playerReady = data.playerReady;
     }
     app.activeScreen.draw();
