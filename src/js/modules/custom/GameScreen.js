@@ -41,7 +41,11 @@ function GameScreen(ctx, canvas, socket, app) {
     handBox.setState('tiles', [], () => {
         handBox.removeAll();
         for (let i = 0; i < handBox.tiles.length; i++) {
-            Tile(handBox, handBox.tiles[i]);
+            const tile = Tile(handBox, handBox.tiles[i]);
+            tile.onClick = () => {
+                console.log('tile clicked');
+                socket.emit('game:action', 'discard', 0, i);
+            };
         }
     });
 
@@ -73,15 +77,25 @@ function GameScreen(ctx, canvas, socket, app) {
             readyButton.style.hidden = false;
             leaveButton.style.hidden = false;
         } else if (gameState.status === 2) {
-            if (gameState.playerActions[0].pong)
-                pongButton.style.hidden = false;
-            if (gameState.playerActions[0].kong)
-                kongButton.style.hidden = false;
-            if (gameState.playerActions[0].chow)
-                chowButton.style.hidden = false;
-            if (gameState.playerActions[0].hu)
-                winButton.style.hidden = false;
-            passButton.style.hidden = false;
+            if (gameState.forbid[0] === 0) {
+                const suits = ['Char', 'Bamboo', 'Dot', 'Wind', 'Dragon'];
+                for (let i = 0; i < 3; i++) {
+                    const suitButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, suits[i]);
+                    suitButton.onClick = () => {
+                        socket.emit('game:action', 'forbid', 0, i);
+                    };
+                }
+            } else if (gameState.waitingFor.includes(0)) {
+                if (gameState.playerActions[0].pong)
+                    pongButton.style.hidden = false;
+                if (gameState.playerActions[0].kong)
+                    kongButton.style.hidden = false;
+                if (gameState.playerActions[0].chow)
+                    chowButton.style.hidden = false;
+                if (gameState.playerActions[0].hu)
+                    winButton.style.hidden = false;
+                passButton.style.hidden = false;
+            }
         }
         handBox.tiles = gameState.players[0].hand;
     });
