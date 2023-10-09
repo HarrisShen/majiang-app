@@ -26,18 +26,33 @@ function GameScreen(ctx, canvas, socket, app) {
             app.mode = 'main';
         });
     });
-    const chowButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Chow');
-    const pongButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pong');
-    const kongButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Kong');
-    const winButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Win');
-    const passButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pass');
 
     controlBox.setState('ready', false, () => {
         readyButton.text = controlBox.ready ? 'Cancel' : 'Ready';
         leaveButton.style.disabled = controlBox.ready;
     });
 
-    const handBox = new Box(mainPlayerBox, {x:70, width: 832, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
+    const suits = ['Char', 'Bamboo', 'Dot', 'Wind', 'Dragon'];
+    const suitButtons = [0, 1, 2].map((i) => {
+        const suitButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, suits[i]);
+        suitButton.onClick = () => {
+            socket.emit('game:action', 'forbid', 0, i);
+        };
+        return suitButton;
+    });
+
+    const chowButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Chow');
+    chowButton.onClick = () => { socket.emit('game:action', 'chow', 0, 0); };
+    const pongButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pong');
+    pongButton.onClick = () => { socket.emit('game:action', 'pong', 0); };
+    const kongButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Kong');
+    kongButton.onClick = () => { socket.emit('game:action', 'kong', 0); };
+    const winButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Win');
+    winButton.onClick = () => { socket.emit('game:action', 'hu', 0); };
+    const passButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pass');
+    passButton.onClick = () => { socket.emit('game:action', 'cancel', 0); };
+
+    const handBox = new Box(mainPlayerBox, {x:70, width: 900, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
     handBox.setState('tiles', [], () => {
         handBox.removeAll();
         for (let i = 0; i < handBox.tiles.length; i++) {
@@ -78,13 +93,9 @@ function GameScreen(ctx, canvas, socket, app) {
             leaveButton.style.hidden = false;
         } else if (gameState.status === 2) {
             if (gameState.forbid[0] === 0) {
-                const suits = ['Char', 'Bamboo', 'Dot', 'Wind', 'Dragon'];
-                for (let i = 0; i < 3; i++) {
-                    const suitButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, suits[i]);
-                    suitButton.onClick = () => {
-                        socket.emit('game:action', 'forbid', 0, i);
-                    };
-                }
+                suitButtons.forEach((button) => {
+                    button.style.hidden = false;
+                });
             } else if (gameState.waitingFor.includes(0)) {
                 if (gameState.playerActions[0].pong)
                     pongButton.style.hidden = false;
