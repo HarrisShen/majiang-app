@@ -7,7 +7,7 @@ import Element from './Element.js';
  */
 class Component extends Element {
     ctx = null;
-    clickable = false;
+    clickable = true;
     hoverable = false;
 
     x = null;

@@ -36,7 +36,7 @@ function GameScreen(ctx, canvas, socket, app) {
     const suitButtons = [0, 1, 2].map((i) => {
         const suitButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, suits[i]);
         suitButton.onClick = () => {
-            socket.emit('game:action', 'forbid', 0, i);
+            socket.emit('game:action', 'forbid', 0, i+1);
         };
         return suitButton;
     });
@@ -57,10 +57,10 @@ function GameScreen(ctx, canvas, socket, app) {
         handBox.removeAll();
         for (let i = 0; i < handBox.tiles.length; i++) {
             const tile = Tile(handBox, handBox.tiles[i]);
-            tile.onClick = () => {
-                console.log('tile clicked');
+            tile.setOnClick(() => {
                 socket.emit('game:action', 'discard', 0, i);
-            };
+                handBox.clickable = false; // disable click after discard
+            });
         }
     });
 
@@ -83,7 +83,11 @@ function GameScreen(ctx, canvas, socket, app) {
     });
     gameScreen.setState('gameState', {}, () => {
         const gameState = gameScreen.gameState;
+
         if (gameState.players === undefined) return;
+
+        handBox.tiles = gameState.players[0].hand;
+        
         const controlButtons = controlBox.components;
         controlButtons.forEach((button) => {
             button.style.hidden = true;
@@ -91,6 +95,8 @@ function GameScreen(ctx, canvas, socket, app) {
         if (gameState.status === 0) {
             readyButton.style.hidden = false;
             leaveButton.style.hidden = false;
+        } else if (gameState.status === 1) {
+            handBox.clickable = true;
         } else if (gameState.status === 2) {
             if (gameState.forbid[0] === 0) {
                 suitButtons.forEach((button) => {
@@ -108,7 +114,6 @@ function GameScreen(ctx, canvas, socket, app) {
                 passButton.style.hidden = false;
             }
         }
-        handBox.tiles = gameState.players[0].hand;
     });
 
     return gameScreen;

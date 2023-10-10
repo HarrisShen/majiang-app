@@ -34,7 +34,7 @@ canvas.addEventListener('mousemove', (e) => {
 canvas.addEventListener('click', (e) => {
     let x = e.offsetX, y = e.offsetY;
     console.log(x + ',' + y);
-    app.activeScreen.passClick(x, y);
+    app.activeScreen.onClick(x, y);
     app.activeScreen.draw();
 });
 
@@ -67,10 +67,10 @@ socket.on('table:update', (data) => {
 });
 
 socket.on('game:update', (data) => {
-    console.log('game:' + data.gameID);
     console.log(data.gameState);
     gameScreen.gameState = data.gameState;
     if (data.start) {
+        console.log('game:' + data.gameID);
         socket.emit('game:action', null, null, null);
     }
     app.activeScreen.draw();

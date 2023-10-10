@@ -6,7 +6,7 @@ class Button extends Component {
 
     clickable = true;
     hoverable = true;
-    onClick = () => { };
+    onClick = () => {};
     onMousemove = (x, y) => {
         if (this.style.disabled) return;
         this.color = this.isInside(x, y) ? '#CCCCCC' : '#AAAAAA';

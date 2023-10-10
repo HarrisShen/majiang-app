@@ -26,11 +26,12 @@ class Container extends Component {
         });
     }
 
-    passClick(x, y) {
+    onClick(x, y) {
+        if (!this.clickable) return;
         this.components.forEach(component => {
             if (component.isFocused() && component.isInside(x, y)) {
-                if (component instanceof Container) component.passClick(x, y);
-                else if (component.clickable) component.onClick();
+                if (component instanceof Container) component.onClick(x, y);
+                else if (typeof component.onClick === 'function') component.onClick();
             }
         });
     }
