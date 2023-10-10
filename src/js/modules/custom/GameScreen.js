@@ -4,7 +4,7 @@ import Box from "../base/Box.js";
 import Button from "../base/Button.js";
 import Tile from "./Tile.js";
 
-function GameScreen(ctx, canvas, socket, app) {
+function GameScreen(ctx, canvas, app, socket) {
     const gameScreen = new Screen(ctx, canvas.width, canvas.height, "#3B7A57");
     const tableIDLable = new Label(gameScreen, {x: 8, y: 12}, 'Table ID: ', '20px Arial Bold', '#000000', 'left', 'top');
     const mainPlayerBox = new Box(gameScreen, {width: canvas.width, height: 220, verticalAlign: 'bottom'}, {}, null, '#000000');
@@ -16,7 +16,6 @@ function GameScreen(ctx, canvas, socket, app) {
     const readyButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Ready');
     readyButton.onClick = () => {
         console.log('READY clicked');
-        // controlBox.ready = !controlBox.ready;
         socket.emit('game:ready');
     };
     const leaveButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle'}, 'Leave');
@@ -53,6 +52,7 @@ function GameScreen(ctx, canvas, socket, app) {
     passButton.onClick = () => { socket.emit('game:action', 'cancel', 0); };
 
     const handBox = new Box(mainPlayerBox, {x:70, width: 900, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
+    handBox.clickable = false;
     handBox.setState('tiles', [], () => {
         handBox.removeAll();
         for (let i = 0; i < handBox.tiles.length; i++) {
@@ -96,7 +96,8 @@ function GameScreen(ctx, canvas, socket, app) {
             readyButton.style.hidden = false;
             leaveButton.style.hidden = false;
         } else if (gameState.status === 1) {
-            handBox.clickable = true;
+            if (gameState.currPlayer === 0)
+                handBox.clickable = true;
         } else if (gameState.status === 2) {
             if (gameState.forbid[0] === 0) {
                 suitButtons.forEach((button) => {

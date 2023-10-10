@@ -18,7 +18,7 @@ app.setState('mode', 'main', () => {
         mainScreen = MainScreen(ctx, canvas, socket);
         app.activeScreen = mainScreen;
     } else if (app.mode === 'game') {
-        gameScreen = GameScreen(ctx, canvas, socket, app);
+        gameScreen = GameScreen(ctx, canvas, app, socket);
         app.activeScreen = gameScreen;
     }
     app.activeScreen.draw();
