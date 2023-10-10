@@ -51,7 +51,7 @@ function GameScreen(ctx, canvas, app, socket) {
     const passButton = new Button(controlBox, {width: 150, height: 40, verticalAlign: 'middle', hidden: true}, 'Pass');
     passButton.onClick = () => { socket.emit('game:action', 'cancel', 0); };
 
-    const handBox = new Box(mainPlayerBox, {x:70, width: 900, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
+    const handBox = new Box(mainPlayerBox, {x: 70, width: 900, height: 110, verticalAlign: 'bottom'}, {type: 'row'}, null, '#000000');
     handBox.clickable = false;
     handBox.setState('tiles', [], () => {
         handBox.removeAll();
@@ -61,6 +61,16 @@ function GameScreen(ctx, canvas, app, socket) {
                 socket.emit('game:action', 'discard', 0, i);
                 handBox.clickable = false; // disable click after discard
             });
+        }
+    });
+
+    const showBox = new Box(mainPlayerBox, {x: 110, width: 900, height: 110, verticalAlign: 'bottom'}, {type: 'row', justify: 'end'}, null, '#000000');
+    showBox.clickable = false;
+    showBox.hoverable = false;
+    showBox.setState('tiles', [], () => {
+        showBox.removeAll();
+        for (let i = 0; i < showBox.tiles.length; i++) {
+            Tile(showBox, showBox.tiles[i], false);
         }
     });
 
@@ -87,6 +97,7 @@ function GameScreen(ctx, canvas, app, socket) {
         if (gameState.players === undefined) return;
 
         handBox.tiles = gameState.players[0].hand;
+        showBox.tiles = gameState.players[0].show;
         
         const controlButtons = controlBox.components;
         controlButtons.forEach((button) => {
