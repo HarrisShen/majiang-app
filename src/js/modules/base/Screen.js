@@ -10,9 +10,14 @@ class Screen extends Container {
     }
 
     draw() {
+        this.clearContext();
         this.evaluateStyle();
         this.drawScreen();
         super.draw();
+    }
+
+    clearContext() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
     }
 
     evaluateStyle() {

@@ -21,21 +21,21 @@ app.setState('mode', 'main', () => {
         gameScreen = GameScreen(ctx, canvas, app, socket);
         app.activeScreen = gameScreen;
     }
-    app.activeScreen.draw();
+    // app.activeScreen.draw();
 });
 app.setState('self', '', () => {});
 
 canvas.addEventListener('mousemove', (e) => {
     let x = e.offsetX, y = e.offsetY;
     app.activeScreen.passMousemove(x, y);
-    app.activeScreen.draw();
+    // app.activeScreen.draw();
 });
 
 canvas.addEventListener('click', (e) => {
     let x = e.offsetX, y = e.offsetY;
     console.log(x + ',' + y);
     app.activeScreen.onClick(x, y);
-    app.activeScreen.draw();
+    // app.activeScreen.draw();
 });
 
 window.addEventListener('load', () => {
@@ -63,7 +63,7 @@ socket.on('table:update', (data) => {
     } else if (data.source === 'reset-ready') {
         gameScreen.playerReady = data.playerReady;
     }
-    app.activeScreen.draw();
+    // app.activeScreen.draw();
 });
 
 socket.on('game:update', (data) => {
@@ -73,5 +73,9 @@ socket.on('game:update', (data) => {
         console.log('game:' + data.gameID);
         socket.emit('game:action', null, null, null);
     }
-    app.activeScreen.draw();
+    // app.activeScreen.draw();
 });
+
+setInterval(() => {
+    app.activeScreen.draw();
+}, 16);
